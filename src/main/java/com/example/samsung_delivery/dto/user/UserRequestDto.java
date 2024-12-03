@@ -1,4 +1,4 @@
-package com.example.samsung_delivery.dto;
+package com.example.samsung_delivery.dto.user;
 
 import com.example.samsung_delivery.entity.User;
 import com.example.samsung_delivery.enums.UserRole;

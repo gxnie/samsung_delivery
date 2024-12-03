@@ -1,4 +1,4 @@
-package com.example.samsung_delivery.dto;
+package com.example.samsung_delivery.dto.login;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
