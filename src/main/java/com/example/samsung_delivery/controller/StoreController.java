@@ -1,8 +1,8 @@
 package com.example.samsung_delivery.controller;
 
 
-import com.example.samsung_delivery.dto.StoreRequestDto;
-import com.example.samsung_delivery.dto.StoreResponseDto;
+import com.example.samsung_delivery.dto.store.StoreRequestDto;
+import com.example.samsung_delivery.dto.store.StoreResponseDto;
 import com.example.samsung_delivery.service.StoreService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
