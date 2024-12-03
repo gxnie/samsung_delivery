@@ -1,6 +1,7 @@
 package com.example.samsung_delivery.entity;
 
 
+
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -13,9 +14,11 @@ import java.time.LocalDateTime;
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
+
 public abstract class BaseEntity {
 
     @CreatedDate
+
     private LocalDateTime createdAt;
 
     @LastModifiedDate
