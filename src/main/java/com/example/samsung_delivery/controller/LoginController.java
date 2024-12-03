@@ -1,6 +1,6 @@
 package com.example.samsung_delivery.controller;
 
-import com.example.samsung_delivery.dto.LoginRequestDto;
+import com.example.samsung_delivery.dto.login.LoginRequestDto;
 import com.example.samsung_delivery.entity.User;
 import com.example.samsung_delivery.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
