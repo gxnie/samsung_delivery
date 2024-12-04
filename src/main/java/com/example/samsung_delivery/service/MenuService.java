@@ -6,6 +6,8 @@ import com.example.samsung_delivery.entity.Store;
 import com.example.samsung_delivery.entity.User;
 import com.example.samsung_delivery.enums.MenuStatus;
 import com.example.samsung_delivery.enums.UserRole;
+import com.example.samsung_delivery.error.errorcode.ErrorCode;
+import com.example.samsung_delivery.error.exception.CustomException;
 import com.example.samsung_delivery.repository.MenuRepository;
 import com.example.samsung_delivery.repository.StoreRepository;
 import com.example.samsung_delivery.repository.UserRepository;
@@ -27,19 +29,19 @@ public class MenuService {
     public MenuResponseDto createMenu(Long storeId, String email, String menuName, int price) {
 
         // 사용자 확인
-        User user = userRepository.findUserByEmail(email).orElseThrow(() ->
-                new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         if (user.getRole() != UserRole.OWNER) {
-            throw new IllegalArgumentException("사장님만 메뉴를 등록할 수 있습니다.");
+            throw new CustomException(ErrorCode.INVALID_USER_ROLE);
         }
 
         // 가게 확인
         Store store = storeRepository.findById(storeId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 가게가 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
         if (!store.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("본인 가게에만 메뉴를 등록할 수 있습니다.");
+            throw new CustomException(ErrorCode.INVALID_USER_ROLE);
         }
 
         Menu menu = new Menu(menuName, price, store, MenuStatus.OPEN);
@@ -54,19 +56,19 @@ public class MenuService {
     public void updateMenu(Long menuId, String email, String menuName, int price) {
 
         // 사용자 확인
-        User user = userRepository.findUserByEmail(email).orElseThrow(() ->
-                new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         if (user.getRole() != UserRole.OWNER) {
-            throw new IllegalArgumentException("사장님만 메뉴를 수정할 수 있습니다.");
+            throw new CustomException(ErrorCode.INVALID_USER_ROLE);
         }
 
         // 메뉴 확인
-        Menu menu = menuRepository.findById(menuId).orElseThrow(() ->
-                new IllegalArgumentException("해당 메뉴가 존재하지 않습니다."));
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 
         if (!menu.getStore().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("본인 가게의 메뉴만 수정할 수 있습니다.");
+            throw new CustomException(ErrorCode.INVALID_STORE_ACCESS);
         }
 
         menu.updateMenu(menuName, price);
@@ -75,19 +77,19 @@ public class MenuService {
 
     public void deleteMenu(Long menuId, String email) {
         // 사용자 확인
-        User user = userRepository.findUserByEmail(email).orElseThrow(() ->
-                new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         if (user.getRole() != UserRole.OWNER) {
-            throw new IllegalArgumentException("사장님만 메뉴를 삭제할 수 있습니다.");
+            throw new CustomException(ErrorCode.INVALID_USER_ROLE);
         }
 
         // 메뉴 삭제
-        Menu menu = menuRepository.findById(menuId).orElseThrow(() ->
-                new IllegalArgumentException("해당 메뉴가 존재하지 않습니다."));
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 
         if (!menu.getStore().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("본인의 가게의 메뉴만 삭제할 수 있습니다.");
+            throw new CustomException(ErrorCode.INVALID_STORE_ACCESS);
         }
 
         // 상태 변경

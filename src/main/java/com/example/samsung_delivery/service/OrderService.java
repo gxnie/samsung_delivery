@@ -45,7 +45,7 @@ public class OrderService {
         Order order = new Order(quantity , totalPrice , address);
         order.setUser(findUser);
         order.setMenu(findMenu);
-        order.setStatus(OrderStatus.ACCEPT_ODER);
+        order.setStatus(OrderStatus.ACCEPT_ORDER);
 
         orderRepository.save(order);
 
