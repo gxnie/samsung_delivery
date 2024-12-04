@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class StoreResponseDto {
+public class AllStoreResponseDto {
 
     private Long id;
 
@@ -26,9 +26,8 @@ public class StoreResponseDto {
 
 //    private StoreStatus status = StoreStatus.ACTIVE;
 
-    private List<StoreMenuResponseDto> menus = new ArrayList<>();
 
-    public StoreResponseDto(Store store) {
+    public AllStoreResponseDto(Store store) {
         this.id = store.getId();
         this.userId = store.getUser().getId();
         this.storeName = store.getStoreName();
@@ -37,10 +36,5 @@ public class StoreResponseDto {
         this.minOrderPrice = store.getMinOrderPrice();
 //        this.status = store.getStatus();
 
-//        this.menus = new ArrayList<>();
-//
-//        for (Menu menu:store.getMenus()) {
-//            this.menus.add(new StoreMenuResponseDto(menu));
-//        }
     }
 }
