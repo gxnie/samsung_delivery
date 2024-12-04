@@ -1,6 +1,7 @@
 package com.example.samsung_delivery.dto.order;
 
 import com.example.samsung_delivery.entity.Order;
+import com.example.samsung_delivery.enums.OrderStatus;
 import lombok.Getter;
 
 @Getter
@@ -18,6 +19,8 @@ public class OrderResponseDto {
 
     private String address;
 
+    private OrderStatus status;
+
     public OrderResponseDto (Order order){
         this.id = order.getId();
         this.menuId = order.getMenu().getId();
@@ -25,6 +28,7 @@ public class OrderResponseDto {
         this.quantity = order.getQuantity();
         this.totalPrice = order.getTotalPrice();
         this.address = order.getAddress();
+        this.status = order.getStatus();
     }
 
 
