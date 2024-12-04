@@ -6,7 +6,7 @@ public enum OrderStatus {
     ORDER_COMPLETED,
 
     //주문수락
-    ACCEPT_ODER,
+    ACCEPT_ORDER,
 
     //조리중
     COOKING,
