@@ -1,14 +1,8 @@
 package com.example.samsung_delivery.service;
 
-import com.example.samsung_delivery.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.example.samsung_delivery.dto.LoginResponseDto;
 
-@Service
-@RequiredArgsConstructor
-public class LoginService {
+public interface LoginService {
 
-    private final UserRepository userRepository;
-
-
+    LoginResponseDto login(String email, String password);
 }
