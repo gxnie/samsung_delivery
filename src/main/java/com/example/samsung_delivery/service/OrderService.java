@@ -31,6 +31,10 @@ public class OrderService {
     private final UserRepository userRepository  ;
     private final StoreRepository storeRepository;
 
+    public Order findOderById(Long id) {
+        return orderRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
+    }
+
     @Transactional
     public OrderResponseDto save (Long userId , Long menuId, Integer quantity , String address ) {
         User findUser = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("회원을 찾을 수 없습니다."));
@@ -45,12 +49,30 @@ public class OrderService {
         Order order = new Order(quantity , totalPrice , address);
         order.setUser(findUser);
         order.setMenu(findMenu);
-        order.setStatus(OrderStatus.ACCEPT_ORDER);
+        order.setStatus(OrderStatus.ORDER_COMPLETED);
 
         orderRepository.save(order);
 
         return new OrderResponseDto(order);
-
     }
+
+    @Transactional
+    public void changeOrderStatus (Long orderId , String status){
+        Order findOrder = findOderById(orderId);
+        switch (status){
+            case "ACCEPT_ORDER": findOrder.updateStatus(OrderStatus.ACCEPT_ORDER);
+                break;
+            case "COOKING": findOrder.updateStatus(OrderStatus.COOKING);
+                break;
+            case "COOKING_COMPLETED": findOrder.updateStatus(OrderStatus.COOKING_COMPLETED);
+                break;
+            case "ON_DELIVERY": findOrder.updateStatus(OrderStatus.ON_DELIVERY);
+                break;
+            case "DELIVERY_COMPLETED": findOrder.updateStatus(OrderStatus.DELIVERY_COMPLETED);
+                break;
+        }
+    }
+
+
 
 }
