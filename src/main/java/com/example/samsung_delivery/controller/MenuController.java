@@ -4,6 +4,8 @@ import com.example.samsung_delivery.config.Const;
 import com.example.samsung_delivery.dto.login.LoginResponseDto;
 import com.example.samsung_delivery.dto.menu.MenuRequestDto;
 import com.example.samsung_delivery.dto.menu.MenuResponseDto;
+import com.example.samsung_delivery.error.errorcode.ErrorCode;
+import com.example.samsung_delivery.error.exception.CustomException;
 import com.example.samsung_delivery.service.MenuService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -32,7 +34,7 @@ public class MenuController {
 
         HttpSession session = request.getSession(false);
         if (session == null) {
-            throw new IllegalArgumentException("로그인이 필요합니다.");
+            throw new CustomException(ErrorCode.LOGIN_REQUIRED);
         }
 
         LoginResponseDto loginUser = (LoginResponseDto) session.getAttribute(Const.LOGIN_USER);
@@ -48,6 +50,10 @@ public class MenuController {
             HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
+        if (session == null) {
+            throw new CustomException(ErrorCode.LOGIN_REQUIRED);
+        }
+
         LoginResponseDto loginUser = (LoginResponseDto) session.getAttribute(Const.LOGIN_USER);
 
         menuService.updateMenu(menuId, loginUser.getEmail(), dto.getMenuName(), dto.getPrice());
@@ -61,7 +67,7 @@ public class MenuController {
             HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if(session == null) {
-            throw new IllegalArgumentException("로그인이 필요합니다.");
+            throw new CustomException(ErrorCode.LOGIN_REQUIRED);
         }
 
         LoginResponseDto loginUser = (LoginResponseDto) session.getAttribute(Const.LOGIN_USER);
