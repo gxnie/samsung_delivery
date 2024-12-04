@@ -73,7 +73,24 @@ public class MenuService {
         menuRepository.save(menu);
     }
 
-    // Menu DELETE
+    public void deleteMenu(Long menuId, String email) {
+        // 사용자 확인
+        User user = userRepository.findUserByEmail(email).orElseThrow(() ->
+                new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
+        if (user.getRole() != UserRole.OWNER) {
+            throw new IllegalArgumentException("사장님만 메뉴를 삭제할 수 있습니다.");
+        }
 
+        // 메뉴 삭제
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() ->
+                new IllegalArgumentException("해당 메뉴가 존재하지 않습니다."));
+
+        if (!menu.getStore().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("본인의 가게의 메뉴만 삭제할 수 있습니다.");
+        }
+
+        // 상태 변경
+        menuRepository.updateStatus(menuId, MenuStatus.CLOSE);
+    }
 }
