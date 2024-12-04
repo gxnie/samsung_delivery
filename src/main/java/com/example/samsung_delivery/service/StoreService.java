@@ -1,7 +1,7 @@
 package com.example.samsung_delivery.service;
 
-import com.example.samsung_delivery.dto.StoreRequestDto;
-import com.example.samsung_delivery.dto.StoreResponseDto;
+import com.example.samsung_delivery.dto.store.StoreRequestDto;
+import com.example.samsung_delivery.dto.store.StoreResponseDto;
 import com.example.samsung_delivery.entity.Store;
 import com.example.samsung_delivery.entity.User;
 import com.example.samsung_delivery.repository.StoreRepository;
