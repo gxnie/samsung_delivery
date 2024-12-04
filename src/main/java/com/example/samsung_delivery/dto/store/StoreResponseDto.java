@@ -2,7 +2,6 @@ package com.example.samsung_delivery.dto.store;
 
 import com.example.samsung_delivery.entity.Menu;
 import com.example.samsung_delivery.entity.Store;
-import com.example.samsung_delivery.enums.StoreStatus;
 import lombok.Getter;
 
 import java.time.LocalTime;

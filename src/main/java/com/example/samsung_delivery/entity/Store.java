@@ -4,7 +4,6 @@ import com.example.samsung_delivery.enums.StoreStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 
-import java.sql.Time;
 import java.time.LocalTime;
 
 

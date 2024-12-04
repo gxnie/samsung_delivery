@@ -1,11 +1,8 @@
 package com.example.samsung_delivery.dto.store;
 
 import com.example.samsung_delivery.entity.Menu;
-import com.example.samsung_delivery.entity.Store;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 public class StoreMenuResponseDto {
