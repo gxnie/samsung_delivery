@@ -24,6 +24,10 @@ public class StoreService {
         User findUser = userRepository.findUserByEmail(email).orElseThrow(()
                 -> new ResponseStatusException(HttpStatus.NOT_FOUND, "이메일과 관련된 사용자를 찾을 수 없음"));
 
-        Store store = new Store(findUser, storeRequestDto.getStoreName(), storeRequestDto.getOpenTime(), )
+        Store store = new Store(findUser, storeRequestDto.getStoreName(), storeRequestDto.getOpenTime(),storeRequestDto.getCloseTime(), storeRequestDto.getMinOrderPrice());
+
+        Store savedStore = storeRepository.save(store);
+
+        return new StoreResponseDto(savedStore);
     }
 }

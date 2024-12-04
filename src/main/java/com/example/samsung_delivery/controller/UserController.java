@@ -1,7 +1,7 @@
 package com.example.samsung_delivery.controller;
 
-import com.example.samsung_delivery.dto.UserRequestDto;
-import com.example.samsung_delivery.dto.UserResponseDto;
+import com.example.samsung_delivery.dto.user.UserRequestDto;
+import com.example.samsung_delivery.dto.user.UserResponseDto;
 import com.example.samsung_delivery.service.LoginService;
 import com.example.samsung_delivery.service.UserService;
 import lombok.RequiredArgsConstructor;
