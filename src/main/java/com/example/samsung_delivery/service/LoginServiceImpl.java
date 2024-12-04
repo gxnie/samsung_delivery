@@ -1,7 +1,7 @@
 package com.example.samsung_delivery.service;
 
 import com.example.samsung_delivery.config.PasswordEncoder;
-import com.example.samsung_delivery.dto.LoginResponseDto;
+import com.example.samsung_delivery.dto.login.LoginResponseDto;
 import com.example.samsung_delivery.entity.User;
 import com.example.samsung_delivery.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

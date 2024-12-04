@@ -1,6 +1,6 @@
 package com.example.samsung_delivery.service;
 
-import com.example.samsung_delivery.dto.LoginResponseDto;
+import com.example.samsung_delivery.dto.login.LoginResponseDto;
 
 public interface LoginService {
 

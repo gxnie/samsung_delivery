@@ -2,8 +2,8 @@ package com.example.samsung_delivery.controller;
 
 
 import com.example.samsung_delivery.config.Const;
-import com.example.samsung_delivery.dto.LoginRequestDto;
-import com.example.samsung_delivery.dto.LoginResponseDto;
+import com.example.samsung_delivery.dto.login.LoginRequestDto;
+import com.example.samsung_delivery.dto.login.LoginResponseDto;
 import com.example.samsung_delivery.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
