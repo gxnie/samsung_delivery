@@ -19,12 +19,4 @@ public class UserResponseDto {
         this.email = email;
         this.role = role;
     }
-
-    public static UserResponseDto todto(User user) {
-        return new UserResponseDto(
-                user.getId(),
-                user.getEmail(),
-                user.getRole()
-        );
-    }
 }
