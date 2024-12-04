@@ -1,8 +1,10 @@
 package com.example.samsung_delivery.entity;
 
+import com.example.samsung_delivery.enums.StoreStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.sql.Time;
 import java.time.LocalTime;
 
 
@@ -27,6 +29,8 @@ public class Store extends BaseEntity{
     LocalTime closeTime;
 
     int minOrderPrice;
+
+    private StoreStatus status = StoreStatus.ACTIVE;
 
     public Store(User user, String storeName, LocalTime openTime, LocalTime closeTime, int minOrderPrice) {
         this.user = user;
