@@ -1,4 +1,4 @@
-package com.example.samsung_delivery.dto;
+package com.example.samsung_delivery.dto.login;
 
 import com.example.samsung_delivery.enums.UserRole;
 import lombok.Getter;
