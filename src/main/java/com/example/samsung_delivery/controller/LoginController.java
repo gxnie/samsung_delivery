@@ -1,12 +1,15 @@
 package com.example.samsung_delivery.controller;
 
+
+import com.example.samsung_delivery.config.Const;
 import com.example.samsung_delivery.dto.LoginRequestDto;
-import com.example.samsung_delivery.entity.User;
-import com.example.samsung_delivery.service.UserService;
+import com.example.samsung_delivery.dto.LoginResponseDto;
+import com.example.samsung_delivery.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,17 +21,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class LoginController {
 
-    private final UserService userService;
+    private final LoginService loginService;
 
-//    // 로그인
-//    @PostMapping("/login")
-//    public ResponseEntity<String> loginUser(@RequestBody LoginRequestDto loginRequestDto,
-//                                            HttpServletRequest request) {
-//        User loginedUser = userService.loginUser(loginRequestDto);
-//        HttpSession session = request.getSession();
-//        session.setAttribute("SESSION_KEY", loginedUser.getUserId());
-//        return ResponseEntity.ok().body("정상적으로 로그인되었습니다.");
-//    }
+    // 사용자 로그인
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDto> login(
+            @Valid @RequestBody LoginRequestDto loginRequestDto, // 로그인 요청 데이터
+            HttpServletRequest servletRequest // HTTP 요청 객체
+    ) {
+        // 로그인 서비스 호출
+        LoginResponseDto loginResponseDto = loginService.login(loginRequestDto.getEmail(), loginRequestDto.getPassword());
 
+        // 세션 생성 및 사용자 정보 저장
+        HttpSession httpSession = servletRequest.getSession();
+        httpSession.setAttribute(Const.LOGIN_USER, loginResponseDto);
 
+        return new ResponseEntity<>(loginResponseDto, HttpStatus.OK); // 로그인 성공 결과 반환
+    }
 }
