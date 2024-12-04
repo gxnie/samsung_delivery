@@ -4,7 +4,6 @@ import com.example.samsung_delivery.enums.StoreStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 
-import java.sql.Time;
 import java.time.LocalTime;
 
 
@@ -17,7 +16,6 @@ public class Store extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //User Entity에 @Entity 선언 시 해결
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="user_id")
     private User user;
@@ -41,5 +39,12 @@ public class Store extends BaseEntity{
     }
 
     public Store() {
+    }
+
+    public void update(String storeName, LocalTime openTime, LocalTime closeTime, int minOrderPrice) {
+        this.storeName = storeName;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.minOrderPrice = minOrderPrice;
     }
 }
