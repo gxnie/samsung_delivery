@@ -1,26 +1,19 @@
 package com.example.samsung_delivery.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.example.samsung_delivery.enums.MenuStatus;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(name = "menu")
 @Getter
-public class Menu extends BaseEntity{
+public class Menu extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter
     @ManyToOne
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;
@@ -36,15 +29,14 @@ public class Menu extends BaseEntity{
     @Column(nullable = false)
     private int price;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status;
+    private MenuStatus status;
 
-    public Menu(Long id, Store store, Order order, String menuName, int price, String status) {
-        this.id = id;
-        this.store = store;
-        this.order = order;
+    public Menu(String menuName, int price, Store store, MenuStatus status) {
         this.menuName = menuName;
         this.price = price;
+        this.store = store;
         this.status = status;
     }
 
