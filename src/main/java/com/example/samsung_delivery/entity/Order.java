@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Entity
-@Table(name = "order")
+@Table(name = "`order`")
 public class Order extends BaseEntity{
 
     @Id
@@ -26,16 +26,24 @@ public class Order extends BaseEntity{
 
     private Integer quantity;
 
+    @Column(name = "total_price")
     private Integer totalPrice;
 
     private String address;
 
+
+    @Setter
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private OrderStatus status;
 
     public Order(){}
 
+    public Order(Integer quantity , Integer totalPrice , String address){
+        this.quantity = quantity;
+        this.totalPrice = totalPrice;
+        this.address = address;
+    }
 
 
 }

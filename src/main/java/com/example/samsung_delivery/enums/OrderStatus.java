@@ -2,6 +2,9 @@ package com.example.samsung_delivery.enums;
 
 public enum OrderStatus {
 
+    //주문완료
+    ORDER_COMPLETED,
+
     //주문수락
     ACCEPT_ODER,
 
