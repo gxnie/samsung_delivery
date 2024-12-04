@@ -2,7 +2,7 @@ package com.example.samsung_delivery.service;
 
 import com.example.samsung_delivery.config.PasswordEncoder;
 import com.example.samsung_delivery.config.SignUpValidation;
-import com.example.samsung_delivery.dto.UserResponseDto;
+import com.example.samsung_delivery.dto.user.UserResponseDto;
 import com.example.samsung_delivery.entity.User;
 import com.example.samsung_delivery.enums.UserRole;
 import com.example.samsung_delivery.enums.UserStatus;
