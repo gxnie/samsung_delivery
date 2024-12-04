@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,6 +53,21 @@ public class MenuController {
         menuService.updateMenu(menuId, loginUser.getEmail(), dto.getMenuName(), dto.getPrice());
         return ResponseEntity.ok().build();
 
+    }
+
+    @DeleteMapping("/{menuId}")
+    public ResponseEntity<Void> deleteMenu(
+            @PathVariable Long menuId,
+            HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if(session == null) {
+            throw new IllegalArgumentException("로그인이 필요합니다.");
+        }
+
+        LoginResponseDto loginUser = (LoginResponseDto) session.getAttribute(Const.LOGIN_USER);
+
+        menuService.deleteMenu(menuId, loginUser.getEmail());
+        return ResponseEntity.ok().build();
     }
 
 }
