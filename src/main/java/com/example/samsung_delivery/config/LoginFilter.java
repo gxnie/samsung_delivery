@@ -1,6 +1,6 @@
 package com.example.samsung_delivery.config;
 
-import com.example.samsung_delivery.dto.LoginResponseDto;
+import com.example.samsung_delivery.dto.login.LoginResponseDto;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
