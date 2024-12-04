@@ -1,7 +1,7 @@
 package com.example.samsung_delivery.controller;
 
-import com.example.samsung_delivery.dto.UserRequestDto;
-import com.example.samsung_delivery.dto.UserResponseDto;
+import com.example.samsung_delivery.dto.user.UserRequestDto;
+import com.example.samsung_delivery.dto.user.UserResponseDto;
 import com.example.samsung_delivery.service.LoginService;
 import com.example.samsung_delivery.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,7 @@ public class UserController {
     // 회원가입
     @PostMapping("/signup")
     public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto userDto) {
-        UserResponseDto userResponseDto =
-                userService.signUp(userDto.getEmail(), userDto.getPassword(), userDto.getRole());
+        UserResponseDto userResponseDto = userService.signUp(userDto.getEmail(), userDto.getPassword(), userDto.getRole());
 
         return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
     }
