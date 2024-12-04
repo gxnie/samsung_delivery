@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +38,20 @@ public class MenuController {
 
         MenuResponseDto menuResponseDto = menuService.createMenu(dto.getStoreId(), loginUser.getEmail(), dto.getMenuName(), dto.getPrice());
         return ResponseEntity.status(HttpStatus.CREATED).body(menuResponseDto);
+    }
+
+    @PatchMapping("/{menuId}")
+    public ResponseEntity<Void> updateMenu(
+            @PathVariable Long menuId,
+            @RequestBody MenuRequestDto dto,
+            HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+        LoginResponseDto loginUser = (LoginResponseDto) session.getAttribute(Const.LOGIN_USER);
+
+        menuService.updateMenu(menuId, loginUser.getEmail(), dto.getMenuName(), dto.getPrice());
+        return ResponseEntity.ok().build();
+
     }
 
 }

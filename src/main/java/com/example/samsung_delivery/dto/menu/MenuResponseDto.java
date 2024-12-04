@@ -1,14 +1,12 @@
 package com.example.samsung_delivery.dto.menu;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class MenuResponseDto {
 
     private final Long menuId;
 
-    @Setter
     private final Long storeId;
 
     private final String menuName;
