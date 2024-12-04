@@ -2,7 +2,7 @@ package com.example.samsung_delivery.controller;
 
 
 import com.example.samsung_delivery.config.Const;
-import com.example.samsung_delivery.dto.LoginResponseDto;
+import com.example.samsung_delivery.dto.login.LoginResponseDto;
 import com.example.samsung_delivery.dto.store.StoreRequestDto;
 import com.example.samsung_delivery.dto.store.StoreResponseDto;
 import com.example.samsung_delivery.enums.UserRole;
