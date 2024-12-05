@@ -1,5 +1,6 @@
 package com.example.samsung_delivery.dto.menu;
 
+import com.example.samsung_delivery.entity.Menu;
 import lombok.Getter;
 
 @Getter
@@ -18,5 +19,11 @@ public class MenuResponseDto {
         this.storeId = storeId;
         this.menuName = menuName;
         this.price = price;
+    }
+    public MenuResponseDto(Menu menu) {
+        this.menuId = menu.getId();
+        this.storeId = menu.getStore().getId();
+        this.menuName = menu.getMenuName();
+        this.price = menu.getPrice();
     }
 }

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.time.LocalTime;
+import java.util.List;
 
 
 @Entity
@@ -19,6 +20,9 @@ public class Store extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="user_id")
     private User user;
+
+    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Menu> menus;
 
     @Column(nullable = false)
     String storeName;
