@@ -1,0 +1,112 @@
+### 회원 가입
+POST localhost:8080/users/signup
+Content-Type: application/json
+
+{
+  "email": "test@naver.com",
+  "password": "asdF1224$",
+  "role" : "USER"
+}
+
+### 로그인
+POST localhost:8080/users/login
+Content-Type: application/json
+
+{
+  "email": "test@naver.com",
+  "password": "asdF1224$"
+}
+
+### 회원 탈퇴
+PATCH localhost:8080/users/{{userId}}
+Content-Type: application/json
+
+{
+  "password": "asdF1224$"
+}
+
+### 가게 생성
+POST localhost:8080/stores
+Content-Type: application/json
+
+{
+  "storeName": "삼성",
+  "openTime": "HH:MM",
+  "closeTime": "HH:MM",
+  "minOrderPrice": 10000
+}
+
+### 가게 수정
+PATCH localhost:8080/stores/{{storeId}}
+Content-Type: application/json
+
+{
+  "storeName": "삼성전자",
+  "openTime": "HH:MM",
+  "closeTime": "HH:MM",
+  "minOrderPrice": 10000
+}
+
+### 가게 단건 조회
+GET localhost:8080/stores/{{storeId}}
+
+### 가게 다건 조회
+GET localhost:8080/stores
+
+### 가게 폐업
+DELETE localhost:8080/stores/{{storeId}}
+
+### 메뉴 생성
+POST localhost:8080/menus
+Content-Type: application/json
+
+{
+  "storeId" : 1,
+  "menuName" : "삼선짬뽕",
+  "price" : 12000
+}
+
+### 메뉴 수정
+PATCH localhost:8080/menus/{{menuId}}
+Content-Type: application/json
+
+{
+  "menuName" : "쟁반짜장",
+  "price" : 12000
+}
+
+### 메뉴 삭제
+DELETE localhost:8080/menus/{{menuId}}
+
+### 메뉴 주문
+POST localhost:8080/orders
+Content-Type: application/json
+
+{
+  "storeId" : 1,
+  "menuId" : 1,
+  "quantity" : 2,
+  "address" : "서울특별시 경복궁 4번 출구"
+}
+
+### 주문 상태 변경
+PATCH localhost:8080/orders/{{orderId}}
+Content-Type: application/json
+
+{
+  "status" : 2
+}
+### status는 ENUM 처리 추후 수정 바람
+
+### 리뷰 생성
+POST localhost:8080/reviews
+Content-Type: application/json
+
+{
+  "orderId" : 1,
+  "content" : "음식이 친절해요",
+  "rating" : 5
+}
+
+### 리뷰 생성일자 기준 조회
+GET localhost:8080/reviews?storeId=1&sort=rating
