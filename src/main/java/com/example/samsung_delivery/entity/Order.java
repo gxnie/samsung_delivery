@@ -29,6 +29,7 @@ public class Order extends BaseEntity{
     @Column(name = "total_price")
     private Integer totalPrice;
 
+    @Column(nullable = false)
     private String address;
 
 

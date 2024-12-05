@@ -17,24 +17,24 @@ public class Store extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="user_id")
+    @ManyToOne
+    @JoinColumn(name ="user_id", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Menu> menus;
 
     @Column(nullable = false)
-    String storeName;
+    private String storeName;
 
     @Column(nullable = false)
-    LocalTime openTime;
+    private LocalTime openTime;
 
     @Column(nullable = false)
-    LocalTime closeTime;
+    private LocalTime closeTime;
 
     @Column(nullable = false)
-    int minOrderPrice;
+    private int minOrderPrice;
 
     @Enumerated(EnumType.STRING)
     private StoreStatus status = StoreStatus.ACTIVE;
