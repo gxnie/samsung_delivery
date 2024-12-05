@@ -75,6 +75,8 @@ public class MenuService {
         menuRepository.save(menu);
     }
 
+    // 메뉴 삭제
+    @Transactional
     public void deleteMenu(Long menuId, String email) {
         // 사용자 확인
         User user = userRepository.findUserByEmail(email)
@@ -84,7 +86,6 @@ public class MenuService {
             throw new CustomException(ErrorCode.INVALID_USER_ROLE);
         }
 
-        // 메뉴 삭제
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 
