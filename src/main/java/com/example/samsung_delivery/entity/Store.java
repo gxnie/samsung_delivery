@@ -20,14 +20,19 @@ public class Store extends BaseEntity{
     @JoinColumn(name ="user_id")
     private User user;
 
+    @Column(nullable = false)
     String storeName;
 
+    @Column(nullable = false)
     LocalTime openTime;
 
+    @Column(nullable = false)
     LocalTime closeTime;
 
+    @Column(nullable = false)
     int minOrderPrice;
 
+    @Enumerated(EnumType.STRING)
     private StoreStatus status = StoreStatus.ACTIVE;
 
     public Store(User user, String storeName, LocalTime openTime, LocalTime closeTime, int minOrderPrice) {
