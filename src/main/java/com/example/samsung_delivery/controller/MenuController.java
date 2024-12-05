@@ -27,6 +27,7 @@ public class MenuController {
 
     private final MenuService menuService;
 
+    // 메뉴 생성
     @PostMapping
     public ResponseEntity<MenuResponseDto> createMenu(
             @RequestBody MenuRequestDto dto,
@@ -43,8 +44,9 @@ public class MenuController {
         return ResponseEntity.status(HttpStatus.CREATED).body(menuResponseDto);
     }
 
+    // 메뉴 수정
     @PatchMapping("/{menuId}")
-    public ResponseEntity<Void> updateMenu(
+    public ResponseEntity<MenuResponseDto> updateMenu(
             @PathVariable Long menuId,
             @RequestBody MenuRequestDto dto,
             HttpServletRequest request) {
@@ -56,17 +58,18 @@ public class MenuController {
 
         LoginResponseDto loginUser = (LoginResponseDto) session.getAttribute(Const.LOGIN_USER);
 
-        menuService.updateMenu(menuId, loginUser.getEmail(), dto.getMenuName(), dto.getPrice());
-        return ResponseEntity.ok().build();
+        MenuResponseDto menuResponseDto = menuService.updateMenu(menuId, loginUser.getEmail(), dto.getMenuName(), dto.getPrice());
+        return new ResponseEntity<>(menuResponseDto, HttpStatus.OK);
 
     }
 
+    // 메뉴 삭제
     @DeleteMapping("/{menuId}")
     public ResponseEntity<Void> deleteMenu(
             @PathVariable Long menuId,
             HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        if(session == null) {
+        if (session == null) {
             throw new CustomException(ErrorCode.LOGIN_REQUIRED);
         }
 

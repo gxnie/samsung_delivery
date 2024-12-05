@@ -31,10 +31,11 @@ public class OrderService {
     private final UserRepository userRepository  ;
     private final StoreRepository storeRepository;
 
+
     public Order findOderById(Long id) {
         return orderRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
     }
-
+    //주문 생성
     @Transactional
     public OrderResponseDto save (Long userId , Long menuId, Integer quantity , String address ) {
         User findUser = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("회원을 찾을 수 없습니다."));
@@ -56,8 +57,9 @@ public class OrderService {
         return new OrderResponseDto(order);
     }
 
+    //주문 상태값 변경
     @Transactional
-    public void changeOrderStatus (Long orderId , String status){
+    public OrderResponseDto changeOrderStatus (Long orderId , String status){
         Order findOrder = findOderById(orderId);
         switch (status){
             case "ACCEPT_ORDER": findOrder.updateStatus(OrderStatus.ACCEPT_ORDER);
@@ -71,6 +73,7 @@ public class OrderService {
             case "DELIVERY_COMPLETED": findOrder.updateStatus(OrderStatus.DELIVERY_COMPLETED);
                 break;
         }
+        return new OrderResponseDto(findOrder);
     }
 
 }

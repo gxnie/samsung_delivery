@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Entity
 @Table(name = "`order`")
@@ -29,13 +32,16 @@ public class Order extends BaseEntity{
     @Column(name = "total_price")
     private Integer totalPrice;
 
+    @Column(nullable = false)
     private String address;
-
 
     @Setter
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private OrderStatus status;
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Review> review;
 
     public Order(){}
 

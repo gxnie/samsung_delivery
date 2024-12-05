@@ -18,7 +18,10 @@ public enum OrderStatus {
     ON_DELIVERY,
 
     //배송완료
-    DELIVERY_COMPLETED;
+    DELIVERY_COMPLETED,
+    
+    //주문 거절
+    REJECTED;
 
 
 }

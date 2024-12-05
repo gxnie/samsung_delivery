@@ -37,6 +37,9 @@ public class User extends BaseEntity{
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<Store> store = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private List<Review> review = new ArrayList<>();
+
     public User(String email, String password, UserRole role) {
         this.email = email;
         this.password = password;

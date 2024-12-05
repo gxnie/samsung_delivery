@@ -4,6 +4,8 @@ import com.example.samsung_delivery.enums.MenuStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "menu")
 @Getter
@@ -26,6 +28,9 @@ public class Menu extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MenuStatus status = MenuStatus.OPEN;
+
+    @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Review> review;
 
     public Menu(String menuName, int price, Store store, MenuStatus status) {
         this.menuName = menuName;

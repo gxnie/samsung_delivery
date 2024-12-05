@@ -53,7 +53,7 @@ public class MenuService {
 
     // 메뉴 수정
     @Transactional
-    public void updateMenu(Long menuId, String email, String menuName, int price) {
+    public MenuResponseDto updateMenu(Long menuId, String email, String menuName, int price) {
 
         // 사용자 확인
         User user = userRepository.findUserByEmail(email)
@@ -72,7 +72,8 @@ public class MenuService {
         }
 
         menu.updateMenu(menuName, price);
-        menuRepository.save(menu);
+        return new MenuResponseDto(menuRepository.save(menu));
+
     }
 
     // 메뉴 삭제

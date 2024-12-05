@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
             if (user.getStatus() == UserStatus.DEACTIVATED) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제된 이메일 입니다.");
             }
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "같은 아이디가 존재합니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "알 수 없는 에러입니다.");
         }
         User user = new User(email,passwordEncoder.encode(password),role);
         User saveUser = userRepository.save(user);

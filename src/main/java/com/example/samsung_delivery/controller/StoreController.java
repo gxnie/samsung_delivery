@@ -32,23 +32,22 @@ public class StoreController {
     }
 
 
-
     //가게 create
     @PostMapping
     public ResponseEntity<StoreResponseDto> crateStore(@RequestBody StoreRequestDto storeRequestDto,
                                                        HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession(false);
 
-        LoginResponseDto dto = (LoginResponseDto)session.getAttribute(Const.LOGIN_USER);
+        LoginResponseDto dto = (LoginResponseDto) session.getAttribute(Const.LOGIN_USER);
         String email = dto.getEmail();
         Long userId = dto.getUserId();
 
         String role = String.valueOf(dto.getUserRole());
         roleValidation(role);
 
-        Long storeCount = storeRepository.countByUserIdAndStatus(userId,StoreStatus.ACTIVE);
+        Long storeCount = storeRepository.countByUserIdAndStatus(userId, StoreStatus.ACTIVE);
 
-        if(storeCount >= 3) {
+        if (storeCount >= 3) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 가게가 3개 초과 입니다");
         }
 
@@ -64,7 +63,7 @@ public class StoreController {
 
         Optional<Store> existStore = storeRepository.findById(id);
 
-        if(existStore.isEmpty()) {
+        if (existStore.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 가게가 없습니다.");
         }
 
@@ -92,7 +91,7 @@ public class StoreController {
                                                         HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession(false);
 
-        LoginResponseDto dto = (LoginResponseDto)session.getAttribute(Const.LOGIN_USER);
+        LoginResponseDto dto = (LoginResponseDto) session.getAttribute(Const.LOGIN_USER);
         Long userId = dto.getUserId();
         String role = String.valueOf(dto.getUserRole());
         roleValidation(role);
@@ -107,10 +106,10 @@ public class StoreController {
     //폐업 update
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteStore(@PathVariable Long id,
-                            HttpServletRequest httpServletRequest) {
+                                              HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession(false);
 
-        LoginResponseDto dto = (LoginResponseDto)session.getAttribute(Const.LOGIN_USER);
+        LoginResponseDto dto = (LoginResponseDto) session.getAttribute(Const.LOGIN_USER);
         Long userId = dto.getUserId();
         String role = String.valueOf(dto.getUserRole());
         roleValidation(role);
@@ -123,7 +122,7 @@ public class StoreController {
 
 
     private void roleValidation(String role) {
-        if(!role.equals("OWNER")) {
+        if (!role.equals("OWNER")) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "사장님이 아닙니다.");
         }
     }
