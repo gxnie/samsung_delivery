@@ -1,5 +1,6 @@
 package com.example.samsung_delivery.dto.store;
 
+import com.example.samsung_delivery.dto.menu.MenuResponseDto;
 import com.example.samsung_delivery.entity.Menu;
 import com.example.samsung_delivery.entity.Store;
 import lombok.Getter;
@@ -23,9 +24,17 @@ public class StoreResponseDto {
 
     private int minOrderPrice;
 
-//    private StoreStatus status = StoreStatus.ACTIVE;
+    private List<MenuResponseDto> menus;
 
-    private List<StoreMenuResponseDto> menus = new ArrayList<>();
+    public StoreResponseDto(Store store, List<MenuResponseDto> menus) {
+        this.id = store.getId();
+        this.userId = store.getUser().getId();
+        this.storeName = store.getStoreName();
+        this.openTime = store.getOpenTime();
+        this.closeTime = store.getCloseTime();
+        this.minOrderPrice = store.getMinOrderPrice();
+        this.menus = menus;
+    }
 
     public StoreResponseDto(Store store) {
         this.id = store.getId();
@@ -34,12 +43,5 @@ public class StoreResponseDto {
         this.openTime = store.getOpenTime();
         this.closeTime = store.getCloseTime();
         this.minOrderPrice = store.getMinOrderPrice();
-//        this.status = store.getStatus();
-
-//        this.menus = new ArrayList<>();
-//
-//        for (Menu menu:store.getMenus()) {
-//            this.menus.add(new StoreMenuResponseDto(menu));
-//        }
     }
 }

@@ -1,13 +1,18 @@
 package com.example.samsung_delivery.service;
 
+import com.example.samsung_delivery.dto.menu.MenuResponseDto;
 import com.example.samsung_delivery.dto.store.AllStoreResponseDto;
+import com.example.samsung_delivery.dto.store.StoreMenuResponseDto;
 import com.example.samsung_delivery.dto.store.StoreRequestDto;
 import com.example.samsung_delivery.dto.store.StoreResponseDto;
+import com.example.samsung_delivery.entity.Menu;
 import com.example.samsung_delivery.entity.Store;
 import com.example.samsung_delivery.entity.User;
 import com.example.samsung_delivery.enums.StoreStatus;
+import com.example.samsung_delivery.repository.MenuRepository;
 import com.example.samsung_delivery.repository.StoreRepository;
 import com.example.samsung_delivery.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +28,7 @@ import java.util.List;
 public class StoreService {
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
+    private final MenuRepository menuRepository;
 
     //가게 생성
     @Transactional
@@ -41,7 +47,14 @@ public class StoreService {
     @Transactional
     public StoreResponseDto findByStoreId(Long id) {
 
-        return new StoreResponseDto(storeRepository.findById(id).get());
+        Store store = storeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("가게가 없습니다 : " + id));
+
+        List<Menu> menus = menuRepository.findByStoreId(id);
+        List<MenuResponseDto> menuResponseDtos = menus.stream()
+                .map(MenuResponseDto::new)
+                .toList();
+        return new StoreResponseDto(store, menuResponseDtos);
 
     }
     

@@ -15,4 +15,6 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
     @Modifying
     @Query("update Menu m set m.status = :status where m.id = :menuId")
     void updateStatus(@Param("menuId") Long menuId, @Param("status") MenuStatus status);
+
+    List<Menu> findByStoreId(Long storeId);
 }
