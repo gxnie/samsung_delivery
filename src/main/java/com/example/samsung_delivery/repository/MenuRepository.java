@@ -1,6 +1,5 @@
 package com.example.samsung_delivery.repository;
 
-import com.example.samsung_delivery.entity.Store;
 import com.example.samsung_delivery.entity.Menu;
 import com.example.samsung_delivery.enums.MenuStatus;
 import org.springframework.data.jpa.repository.JpaRepository;

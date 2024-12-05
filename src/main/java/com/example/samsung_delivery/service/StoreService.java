@@ -2,7 +2,6 @@ package com.example.samsung_delivery.service;
 
 import com.example.samsung_delivery.dto.menu.MenuResponseDto;
 import com.example.samsung_delivery.dto.store.AllStoreResponseDto;
-import com.example.samsung_delivery.dto.store.StoreMenuResponseDto;
 import com.example.samsung_delivery.dto.store.StoreRequestDto;
 import com.example.samsung_delivery.dto.store.StoreResponseDto;
 import com.example.samsung_delivery.entity.Menu;
