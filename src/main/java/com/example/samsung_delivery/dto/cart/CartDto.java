@@ -17,7 +17,7 @@ public class CartDto {
     private Long userId;
     private Long storeId;
     private List<CartItemDto> items = new ArrayList<>();
-    private LocalDateTime lastUpdated;
+    private LocalDateTime lastUpdated = LocalDateTime.now();
 
     public boolean isExpired() {
         return lastUpdated.plusDays(1).isBefore(LocalDateTime.now());
