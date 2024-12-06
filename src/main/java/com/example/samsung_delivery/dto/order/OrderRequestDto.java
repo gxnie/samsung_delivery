@@ -6,21 +6,25 @@ import lombok.Getter;
 @Getter
 public class OrderRequestDto {
 
-    @NotNull(message = "userId 은 필수값 입니다.")
+    @NotNull(message = "필수값 누락 입니다.")
     private final Long userId;
 
-    @NotNull(message = "menuId 은 필수값 입니다.")
+    @NotNull(message = "필수값 누락 입니다.")
     private final Long menuId;
 
+    @NotNull(message = "필수값 누락 입니다.")
+    private final int usePoint;
 
-    private final Integer quantity;
+    @NotNull(message = "필수값 누락 입니다.")
+    private final int quantity;
 
-    @NotNull(message = "address 은 필수값 입니다.")
+    @NotNull(message = "필수값 누락 입니다.")
     private final String address;
 
-    public OrderRequestDto(Long userId, Long menuId, Integer quantity, String address) {
+    public OrderRequestDto(Long userId, Long menuId, int usePoint, Integer quantity, String address) {
         this.userId = userId;
         this.menuId = menuId;
+        this.usePoint = usePoint;
         this.quantity = quantity;
         this.address = address;
     }
