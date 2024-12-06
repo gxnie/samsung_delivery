@@ -22,4 +22,6 @@ public interface PointRepository extends JpaRepository<Point,Long> {
     void updateStatus(@Param("status") PointStatus status);
 
     Optional<Point> findByUser_Id(Long userId);
+
+    int countByUser_Id(Long userId);
 }

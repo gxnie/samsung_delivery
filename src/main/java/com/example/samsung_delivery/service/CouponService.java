@@ -28,6 +28,7 @@ public class CouponService {
     private final UserRepository userRepository;
     private final StoreRepository storeRepository;
 
+    //쿠폰생성
     @Transactional
     public CouponResponseDto createCoupon(Long userId , CouponRequestDto requestDto){
 

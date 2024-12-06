@@ -20,10 +20,13 @@ public enum ErrorCode {
     /* 403 FORBIDDEN : 권한이 없음 */
     INVALID_USER_ROLE(FORBIDDEN, "사장님만 가능한 작업입니다."),
     INVALID_STORE_ACCESS(FORBIDDEN, "본인 가게에만 접근할 수 있습니다."),
-    INVALID_COUPON_ACCESS(FORBIDDEN, "이미 발급받은 쿠폰입니다."),
+    INVALID_COUPON_ISSUED(FORBIDDEN, "이미 발급받은 쿠폰입니다."),
+    INVALID_COUPON_STORE(FORBIDDEN,"발급받은 상점에만 사용할 수 있습니다."),
+    INVALID_COUPON_ACCESS(FORBIDDEN , "해당쿠폰은 더이상 사용할 수 없습니다."),
     PRICE_NOT_ENOUGH(FORBIDDEN, "주문금액이 부족합니다."),
     POINT_NOT_ENOUGH(FORBIDDEN , "포인트 부족"),
     COUPON_CANNOT_ISSUED(FORBIDDEN, "해당쿠폰은 더이상 발급할 수 없습니다."),
+
 
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
