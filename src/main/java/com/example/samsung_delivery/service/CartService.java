@@ -3,10 +3,8 @@ package com.example.samsung_delivery.service;
 import com.example.samsung_delivery.config.CartCookieEncoder;
 import com.example.samsung_delivery.dto.cart.CartDto;
 import com.example.samsung_delivery.dto.cart.CartItemDto;
-import com.example.samsung_delivery.entity.Cart;
 import com.example.samsung_delivery.entity.Store;
 import com.example.samsung_delivery.entity.User;
-import com.example.samsung_delivery.repository.CartRepository;
 import com.example.samsung_delivery.repository.StoreRepository;
 import com.example.samsung_delivery.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
@@ -20,50 +18,42 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class CartService {
 
-    @Transactional
-    public List<CartDto> getCartList(String cartCookie) {
+    public CartDto getCart(String cartCookie) {
         if (cartCookie == null) {
-            return new ArrayList<>();
+            return new CartDto();
         }
 
-        List<CartDto> cartList = (List<CartDto>) CartCookieEncoder.decode(cartCookie);
+        CartDto cart = CartCookieEncoder.decode(cartCookie);
 
-        // 만료된 장바구니는 제거
-        return cartList.stream()
-                .filter(cart -> !cart.isExpired())
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public List<CartDto> addToCart(String cartCookie, Long userId, Long storeId, CartItemDto newItem) {
-        List<CartDto> cartList = getCartList(cartCookie);
-
-        CartDto existingCart = cartList.stream()
-                .filter(cart -> cart.getStoreId().equals(storeId))
-                .findFirst()
-                .orElse(null);
-
-        if (existingCart == null) {
-            // 새로운 가게 장바구니 생성
-            CartDto newCart = new CartDto(userId, storeId, new ArrayList<>(), LocalDateTime.now());
-            newCart.getItems().add(newItem);
-            cartList.add(newCart);
-        } else {
-            // 기존 가게의 장바구니 업데이트
-            existingCart.getItems().add(newItem);
-            existingCart.setLastUpdated(LocalDateTime.now());
+        if (cart.isExpired()) {
+            return new CartDto(); // 만료된 경우 새 장바구니 반환
         }
 
-        return cartList;
+        return cart;
     }
 
-    public void setCartCookie(HttpServletResponse response, List<CartDto> cartList) {
-        Cookie cookie = new Cookie("cart", CartCookieEncoder.encode(cartList));
+    public CartDto addToCart(String cartCookie, Long storeId, CartItemDto newItem) {
+        CartDto cart = getCart(cartCookie);
+
+        if (cart.getStoreId() != null && !cart.getStoreId().equals(storeId)) {
+            // 가게가 변경되었을 때 초기화
+            cart = new CartDto();
+        }
+
+        cart.setStoreId(storeId);
+        cart.getItems().add(newItem);
+        cart.setLastUpdated(LocalDateTime.now());
+
+        return cart;
+    }
+
+    public void setCartCookie(HttpServletResponse response, CartDto cart) {
+        Cookie cookie = new Cookie("cart", CartCookieEncoder.encode(cart));
         cookie.setHttpOnly(true);
         cookie.setMaxAge(24 * 60 * 60); // 1일
         response.addCookie(cookie);
@@ -74,6 +64,60 @@ public class CartService {
         cookie.setMaxAge(0);
         response.addCookie(cookie);
     }
+
+
+//    public CartDto getCart(String cartCookie) {
+//        if (cartCookie == null) {
+//            return new CartDto();
+//        }
+//        CartDto cart = CartCookieEncoder.decode(cartCookie);
+//
+//        // 만료된 장바구니는 제거
+//        if (cart.isExpired()) {
+//            return new CartDto();
+//        }
+//        return cart;
+//    }
+//
+//    // 장바구니 생성 & 수정
+//    @Transactional
+//    public CartDto addToCart(String cartCookie, Long userId, Long storeId, CartItemDto newItem) {
+//        CartDto cart = getCart(cartCookie);
+//
+//        if (cart.getStoreId() != null && !cart.getStoreId().equals(storeId)) {
+//            // 가게가 변경되었을 때 초기화
+//            cart = new CartDto();
+//        }
+//        cart.setStoreId(storeId);
+//        cart.getItems().add(newItem);
+//        cart.setLastUpdated(LocalDateTime.now());
+//
+//        return cart;
+//    }
+
+//        if (existingCart == null) {
+//            // 새로운 가게 장바구니 생성
+//            CartDto newCart = new CartDto(userId, storeId, new ArrayList<>(), LocalDateTime.now());
+//            newCart.getItems().add(newItem);
+//            cartList.add(newCart);
+//        } else {
+//            // 기존 가게의 장바구니 업데이트
+//            existingCart.getItems().add(newItem);
+//            existingCart.setLastUpdated(LocalDateTime.now());
+//        }
+
+//    public void setCartCookie(HttpServletResponse response, CartDto cart) {
+//        Cookie cookie = new Cookie("cart", CartCookieEncoder.encode((List<CartDto>) cart));
+//        cookie.setHttpOnly(true);
+//        cookie.setMaxAge(24 * 60 * 60); // 1일
+//        response.addCookie(cookie);
+//    }
+//
+//    public void clearCartCookie(HttpServletResponse response) {
+//        Cookie cookie = new Cookie("cart", null);
+//        cookie.setMaxAge(0);
+//        response.addCookie(cookie);
+//    }
 
 
 

@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartItemDto {
+    private Long menuId;
     private String menuName;
     private int quantity;
     private int price;

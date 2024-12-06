@@ -2,7 +2,6 @@ package com.example.samsung_delivery.controller;
 
 import com.example.samsung_delivery.dto.cart.CartDto;
 import com.example.samsung_delivery.dto.cart.CartItemDto;
-import com.example.samsung_delivery.entity.Cart;
 import com.example.samsung_delivery.service.CartService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,21 +19,20 @@ public class CartController {
     private final CartService cartService;
 
     @GetMapping
-    public ResponseEntity<List<CartDto>> getCart(@CookieValue(name = "cart", required = false) String cartCookie) {
-        List<CartDto> cartList = cartService.getCartList(cartCookie);
-        return ResponseEntity.ok(cartList);
+    public ResponseEntity<CartDto> getCart(@CookieValue(name = "cart", required = false) String cartCookie) {
+        CartDto cart = cartService.getCart(cartCookie);
+        return ResponseEntity.ok(cart);
     }
 
     @PostMapping
     public ResponseEntity<Void> addToCart(
             @CookieValue(name = "cart", required = false) String cartCookie,
             @RequestBody CartItemDto newItem,
-            @RequestParam Long userId,
             @RequestParam Long storeId,
             HttpServletResponse response
     ) {
-        List<CartDto> updatedCartList = cartService.addToCart(cartCookie, userId, storeId, newItem);
-        cartService.setCartCookie(response, updatedCartList);
+        CartDto updatedCart = cartService.addToCart(cartCookie, storeId, newItem);
+        cartService.setCartCookie(response, updatedCart);
         return ResponseEntity.ok().build();
     }
 
