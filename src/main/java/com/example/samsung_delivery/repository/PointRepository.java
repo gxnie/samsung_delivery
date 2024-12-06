@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface PointRepository extends JpaRepository<Point,Long> {
 
@@ -18,4 +20,6 @@ public interface PointRepository extends JpaRepository<Point,Long> {
     @Modifying
     @Query(value = "update Point p set p.status = :status where p.expiredAt < now()")
     void updateStatus(@Param("status") PointStatus status);
+
+    Optional<Point> findByUser_Id(Long userId);
 }

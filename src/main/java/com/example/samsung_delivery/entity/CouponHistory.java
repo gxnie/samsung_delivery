@@ -34,5 +34,13 @@ public class CouponHistory extends BaseEntity{
     @Column(nullable = false)
     private CouponStatus status;
 
+    public CouponHistory (User user , Store store , Coupon coupon){
+        this.setUser(user);
+        this.setStore(store);
+        this.setCoupon(coupon);
+    }
 
+    public CouponHistory() {
+
+    }
 }
