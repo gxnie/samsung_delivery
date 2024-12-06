@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 import static java.time.LocalDateTime.now;
 
@@ -44,6 +45,7 @@ public class PointService {
     public void usePoint(Long userId, Integer usePoint){
         User findUser = userRepository.findById(userId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
         int userTotalPoint = getUserTotalPoint(userId);
+        //해당유저가 사용할 point 이상 갖고있는지 판별
         if(userTotalPoint < usePoint){
             throw new CustomException(ErrorCode.POINT_NOT_ENOUGH);
         }
@@ -61,7 +63,12 @@ public class PointService {
 
     public int getUserTotalPoint(Long userId){
         User findUser = userRepository.findById(userId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
-       return pointRepository.totalPoint(findUser.getId());
+        Optional<Point> findPoint = pointRepository.findByUser_Id(userId);
+        int totalPoint = 0;
+        if (findPoint.isPresent()){
+            totalPoint = pointRepository.totalPoint(findUser.getId());
+        }
+       return totalPoint;
     }
 
 
