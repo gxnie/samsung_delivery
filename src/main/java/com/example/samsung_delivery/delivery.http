@@ -3,9 +3,9 @@ POST localhost:8080/users/signup
 Content-Type: application/json
 
 {
-  "email": "test@naver.com",
+  "email": "test2@naver.com",
   "password": "asdF1224$",
-  "role" : "USER"
+  "role" : "OWNER"
 }
 
 ### 로그인
@@ -13,7 +13,7 @@ POST localhost:8080/users/login
 Content-Type: application/json
 
 {
-  "email": "test@naver.com",
+  "email": "test2@naver.com",
   "password": "asdF1224$"
 }
 
@@ -31,8 +31,8 @@ Content-Type: application/json
 
 {
   "storeName": "삼성",
-  "openTime": "HH:MM",
-  "closeTime": "HH:MM",
+  "openTime": "10:00",
+  "closeTime": "11:00",
   "minOrderPrice": 10000
 }
 
@@ -110,3 +110,30 @@ Content-Type: application/json
 
 ### 리뷰 생성일자 기준 조회
 GET localhost:8080/reviews?storeId=1&sort=rating
+
+### 장바구니 조회 - 장바구니 생성 전에 데이터가 있는 지 없는지 확인
+GET localhost:8080/cart
+
+### 장바구니 생성
+POST localhost:8080/cart
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "storeId" : 1,
+  "menuName": "삼선짬뽕",
+  "quantity": 3,
+  "price" : 12000
+}
+
+### 장바구니 수정
+PUT localhost:8080/cart
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "storeId" : 1,
+  "menuName": "쟁반짜장",
+  "quantity": 4,
+  "price" : 12000
+}
