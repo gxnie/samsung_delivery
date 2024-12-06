@@ -63,9 +63,9 @@ public class PointService {
 
     public int getUserTotalPoint(Long userId){
         User findUser = userRepository.findById(userId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
-        Optional<Point> findPoint = pointRepository.findByUser_Id(userId);
+        int countUser = pointRepository.countByUser_Id(userId);
         int totalPoint = 0;
-        if (findPoint.isPresent()){
+        if (countUser != 0){
             totalPoint = pointRepository.totalPoint(findUser.getId());
         }
        return totalPoint;

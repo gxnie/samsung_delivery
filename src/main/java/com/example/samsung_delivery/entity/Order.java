@@ -29,6 +29,11 @@ public class Order extends BaseEntity{
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "coupon_id")
+    private Coupon coupon;
+
     private int quantity;
 
     @Column(name = "total_price")
