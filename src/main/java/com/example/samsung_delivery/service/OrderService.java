@@ -31,8 +31,10 @@ public class OrderService {
     //주문 생성
     @Transactional
     public OrderResponseDto save (Long userId , OrderRequestDto dto) {
-        User findUser = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        Menu findMenu = menuRepository.findById(dto.getMenuId()).orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
+        User findUser = userRepository.findById(userId).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        Menu findMenu = menuRepository.findById(dto.getMenuId()).orElseThrow(
+                () -> new CustomException(ErrorCode.MENU_NOT_FOUND));
         Store findStore = findMenu.getStore();
         //총 주문 금액 (메뉴가격 * 수량 - 사용포인트)
         int totalPrice = (findMenu.getPrice() * dto.getQuantity()) - dto.getUsePoint();
