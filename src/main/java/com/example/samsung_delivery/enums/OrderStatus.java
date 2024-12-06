@@ -23,5 +23,4 @@ public enum OrderStatus {
     //주문 거절
     REJECTED;
 
-
 }

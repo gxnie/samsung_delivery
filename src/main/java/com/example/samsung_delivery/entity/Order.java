@@ -2,8 +2,10 @@ package com.example.samsung_delivery.entity;
 
 import com.example.samsung_delivery.enums.OrderStatus;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +29,10 @@ public class Order extends BaseEntity{
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
-    private Integer quantity;
+    private int quantity;
 
     @Column(name = "total_price")
-    private Integer totalPrice;
+    private int totalPrice;
 
     @Column(nullable = false)
     private String address;
@@ -40,13 +42,17 @@ public class Order extends BaseEntity{
     @Column(nullable = false)
     private OrderStatus status;
 
+    @ColumnDefault("0")
+    private int usePoint;
+
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Review> review;
 
     public Order(){}
 
-    public Order(Integer quantity , Integer totalPrice , String address){
+    public Order(Integer quantity ,Integer usePoint ,Integer totalPrice , String address){
         this.quantity = quantity;
+        this.usePoint = usePoint;
         this.totalPrice = totalPrice;
         this.address = address;
     }
