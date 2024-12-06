@@ -29,7 +29,7 @@ public class OrderController {
         HttpSession session = httpServletRequest.getSession(false);
         LoginResponseDto loginUser = (LoginResponseDto) session.getAttribute(Const.LOGIN_USER);
 
-        return ResponseEntity.ok().body(orderService.save(loginUser.getUserId(), requestDto.getMenuId(), requestDto.getQuantity(), requestDto.getAddress()));
+        return ResponseEntity.ok().body(orderService.save(loginUser.getUserId(), requestDto));
     }
 
     //주문 상태 수정
