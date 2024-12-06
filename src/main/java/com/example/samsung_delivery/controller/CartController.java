@@ -7,10 +7,12 @@ import com.example.samsung_delivery.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -20,7 +22,14 @@ import java.util.List;
 @RequestMapping("/cart")
 public class CartController {
 
-    private CartService cartService;
+    private final CartService cartService;
+
+    // 장바구니 생성 전 데이터가 남아있는지 확인을 위한 조회
+    @GetMapping
+    public ResponseEntity<List<CartResponseDto>> getCart(@RequestParam Long userId) {
+        List<CartResponseDto> carts = cartService.getCart(userId);
+        return new ResponseEntity<>(carts, HttpStatus.OK);
+    }
 
     // 장바구니 생성
     @PostMapping
@@ -34,6 +43,30 @@ public class CartController {
                 .toList();
         return new ResponseEntity<>(carts, HttpStatus.CREATED);
     }
+
+    // 장바구니 수정
+    @PutMapping
+    public ResponseEntity<List<CartResponseDto>> updateCart(@RequestBody CartRequestDto requestDto) {
+        List<CartResponseDto> carts = cartService.updateCart(
+                requestDto.getUserId(),
+                requestDto.getMenuName(),
+                requestDto.getQuantity(),
+                requestDto.getPrice()
+        );
+        return new ResponseEntity<>(carts, HttpStatus.OK);
+    }
+
+
+//    // 장바구니 생성
+//    @PostMapping
+//    public ResponseEntity<List<CartResponseDto>> createCart(@RequestBody CartRequestDto requestDto) {
+//        List<CartResponseDto> carts = cartService.addToCart(
+//                requestDto.getUserId(), requestDto.getStoreId(),
+//                requestDto.getMenuName(), requestDto.getQuantity(), requestDto.getPrice()
+//        );
+//        return new ResponseEntity<>(carts, HttpStatus.CREATED);
+//    }
+
 
     // 장바구니 수정
 //    @PutMapping
