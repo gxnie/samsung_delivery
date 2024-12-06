@@ -36,14 +36,14 @@ public class Cart extends BaseEntity {
     @Column(nullable = false)
     private int price;
 
-    // 장바구니 기본 값 true
-    @Column(nullable = false)
-    private boolean isVisible = true;
-
-    // 장바구니 숨기기
-    public void hideCart() {
-        this.isVisible = false;
-    }
+//    // 장바구니 기본 값 true
+//    @Column(nullable = false)
+//    private boolean isVisible = true;
+//
+//    // 장바구니 숨기기
+//    public void hideCart() {
+//        this.isVisible = false;
+//    }
 
     public void updateCart(String menuName, int quantity, int price) {
         this.menuName = menuName;

@@ -1,23 +1,28 @@
-package com.example.samsung_delivery.dto.cart;
-
-import com.example.samsung_delivery.entity.Cart;
-import lombok.Getter;
-
-@Getter
-public class CartResponseDto {
-
-    private Long cartId;
-
-    private String menuName;
-
-    private int price;
-
-    private int quantity;
-
-    public CartResponseDto(Long cartId, String menuName, int price, int quantity) {
-        this.cartId = cartId;
-        this.menuName = menuName;
-        this.price = price;
-        this.quantity = quantity;
-    }
-}
+//package com.example.samsung_delivery.dto.cart;
+//
+//import com.example.samsung_delivery.entity.Cart;
+//import lombok.Getter;
+//
+//import java.time.LocalDateTime;
+//
+//@Getter
+//public class CartResponseDto {
+//
+//    private Long cartId;
+//    private Long storeId;
+//    private String menuName;
+//    private int price;
+//    private int quantity;
+//    private LocalDateTime createdAt;
+//    private LocalDateTime modifiedAt;
+//
+//    public CartResponseDto(Cart cart) {
+//        this.cartId = cartId;
+//        this.storeId = storeId;
+//        this.menuName = menuName;
+//        this.price = price;
+//        this.quantity = quantity;
+//        this.createdAt = cart.getCreatedAt();
+//        this.modifiedAt = cart.getModifiedAt();
+//    }
+//}
