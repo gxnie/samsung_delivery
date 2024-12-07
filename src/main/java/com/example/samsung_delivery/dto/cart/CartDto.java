@@ -18,8 +18,8 @@ public class CartDto {
     private Long storeId;
     private List<CartItemDto> items = new ArrayList<>();
     private LocalDateTime lastUpdated = LocalDateTime.now();
-    private int totalPrice; // 추가
-    private String status; // 추가
+    private int totalPrice;
+    private String status;
 
     public boolean isExpired() {
         return lastUpdated.plusDays(1).isBefore(LocalDateTime.now());
