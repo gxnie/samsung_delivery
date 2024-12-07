@@ -3,9 +3,9 @@ POST localhost:8080/users/signup
 Content-Type: application/json
 
 {
-  "email": "test2@naver.com",
+  "email": "test@naver.com",
   "password": "asdF1224$",
-  "role" : "OWNER"
+  "role" : "USER"
 }
 
 ### 로그인
@@ -13,7 +13,7 @@ POST localhost:8080/users/login
 Content-Type: application/json
 
 {
-  "email": "test2@naver.com",
+  "email": "test@naver.com",
   "password": "asdF1224$"
 }
 
@@ -71,6 +71,7 @@ PATCH localhost:8080/menus/{{menuId}}
 Content-Type: application/json
 
 {
+  "storeId": "1",
   "menuName" : "쟁반짜장",
   "price" : 12000
 }
@@ -90,13 +91,7 @@ Content-Type: application/json
 }
 
 ### 주문 상태 변경
-PATCH localhost:8080/orders/{{orderId}}
-Content-Type: application/json
-
-{
-  "status" : 2
-}
-### status는 ENUM 처리 추후 수정 바람
+PATCH localhost:8080/orders/status=ACCEPT_ORDER
 
 ### 리뷰 생성
 POST localhost:8080/reviews
@@ -111,16 +106,14 @@ Content-Type: application/json
 ### 리뷰 생성일자 기준 조회
 GET localhost:8080/reviews?storeId=1&sort=rating
 
-### 장바구니 조회 - 장바구니 생성 전에 데이터가 있는 지 없는지 확인
+### 장바구니 조회 - 장바구니 생성 전에 데이터가 있는 지 없는 지 확인
 GET localhost:8080/cart
 
 ### 장바구니 생성
-POST localhost:8080/cart
+POST localhost:8080/cart?userId=1&storeId=1
 Content-Type: application/json
 
 {
-  "userId": 1,
-  "storeId" : 1,
   "menuName": "삼선짬뽕",
   "quantity": 3,
   "price" : 12000

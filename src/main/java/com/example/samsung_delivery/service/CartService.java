@@ -3,256 +3,70 @@ package com.example.samsung_delivery.service;
 import com.example.samsung_delivery.config.CartCookieEncoder;
 import com.example.samsung_delivery.dto.cart.CartDto;
 import com.example.samsung_delivery.dto.cart.CartItemDto;
-import com.example.samsung_delivery.entity.Store;
-import com.example.samsung_delivery.entity.User;
-import com.example.samsung_delivery.repository.StoreRepository;
-import com.example.samsung_delivery.repository.UserRepository;
-import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
 @RequiredArgsConstructor
 public class CartService {
 
-    public CartDto getCart(String cartCookie) {
-        if (cartCookie == null) {
-            return new CartDto();
+    private final CartCookieEncoder cartCookieEncoder;
+
+    // 장바구니 조회
+    public CartDto getCart(HttpServletRequest request) {
+        List<CartItemDto> items = cartCookieEncoder.getCartFromCookies(request);
+        CartDto cartDto = new CartDto();
+        cartDto.setItems(items);
+
+        // 만료 여부 확인
+        if (cartDto.isExpired()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "장바구니가 만료되었습니다.");
         }
 
-        CartDto cart = CartCookieEncoder.decode(cartCookie);
+        return cartDto;
+    }
 
-        if (cart.isExpired()) {
-            return new CartDto(); // 만료된 경우 새 장바구니 반환
+    // 장바구니 저장
+    public CartDto saveCart(HttpServletResponse response, CartDto cartDto) {
+        validateCart(cartDto);
+
+        // 총합 계산
+        int totalPrice = cartDto.calculateTotalPrice();
+        // 디버깅용 출력
+        System.out.println("장바구니 총합: " + totalPrice);
+
+        cartDto.setLastUpdated(LocalDateTime.now());
+        cartCookieEncoder.setCartToCookies(cartDto.getItems(), response);
+
+        return cartDto;
+    }
+
+    // 장바구니 비우기
+    public void clearCart(HttpServletResponse response) {
+        cartCookieEncoder.deleteCartCookie(response);
+    }
+
+    // 장바구니 유효성 검증
+    private void validateCart(CartDto cartDto) {
+        if (cartDto.getItems().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "장바구니가 비어 있습니다.");
         }
 
-        return cart;
-    }
-
-    public CartDto addToCart(String cartCookie, Long storeId, CartItemDto newItem) {
-        CartDto cart = getCart(cartCookie);
-
-        if (cart.getStoreId() != null && !cart.getStoreId().equals(storeId)) {
-            // 가게가 변경되었을 때 초기화
-            cart = new CartDto();
+        Long storeId = null;
+        for (CartItemDto item : cartDto.getItems()) {
+            if (storeId == null) {
+                storeId = cartDto.getStoreId();
+            } else if (!storeId.equals(cartDto.getStoreId())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "장바구니에는 같은 가게의 상품만 담을 수 있습니다.");
+            }
         }
-
-        cart.setStoreId(storeId);
-        cart.getItems().add(newItem);
-        cart.setLastUpdated(LocalDateTime.now());
-
-        return cart;
     }
-
-    public void setCartCookie(HttpServletResponse response, CartDto cart) {
-        Cookie cookie = new Cookie("cart", CartCookieEncoder.encode(cart));
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(24 * 60 * 60); // 1일
-        response.addCookie(cookie);
-    }
-
-    public void clearCartCookie(HttpServletResponse response) {
-        Cookie cookie = new Cookie("cart", null);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
-    }
-
-
-//    public CartDto getCart(String cartCookie) {
-//        if (cartCookie == null) {
-//            return new CartDto();
-//        }
-//        CartDto cart = CartCookieEncoder.decode(cartCookie);
-//
-//        // 만료된 장바구니는 제거
-//        if (cart.isExpired()) {
-//            return new CartDto();
-//        }
-//        return cart;
-//    }
-//
-//    // 장바구니 생성 & 수정
-//    @Transactional
-//    public CartDto addToCart(String cartCookie, Long userId, Long storeId, CartItemDto newItem) {
-//        CartDto cart = getCart(cartCookie);
-//
-//        if (cart.getStoreId() != null && !cart.getStoreId().equals(storeId)) {
-//            // 가게가 변경되었을 때 초기화
-//            cart = new CartDto();
-//        }
-//        cart.setStoreId(storeId);
-//        cart.getItems().add(newItem);
-//        cart.setLastUpdated(LocalDateTime.now());
-//
-//        return cart;
-//    }
-
-//        if (existingCart == null) {
-//            // 새로운 가게 장바구니 생성
-//            CartDto newCart = new CartDto(userId, storeId, new ArrayList<>(), LocalDateTime.now());
-//            newCart.getItems().add(newItem);
-//            cartList.add(newCart);
-//        } else {
-//            // 기존 가게의 장바구니 업데이트
-//            existingCart.getItems().add(newItem);
-//            existingCart.setLastUpdated(LocalDateTime.now());
-//        }
-
-//    public void setCartCookie(HttpServletResponse response, CartDto cart) {
-//        Cookie cookie = new Cookie("cart", CartCookieEncoder.encode((List<CartDto>) cart));
-//        cookie.setHttpOnly(true);
-//        cookie.setMaxAge(24 * 60 * 60); // 1일
-//        response.addCookie(cookie);
-//    }
-//
-//    public void clearCartCookie(HttpServletResponse response) {
-//        Cookie cookie = new Cookie("cart", null);
-//        cookie.setMaxAge(0);
-//        response.addCookie(cookie);
-//    }
-
-
-
-//    // 하루가 지난 장바구니는 조회되지 않도록 검증
-//    @Transactional
-//    public List<CartResponseDto> getCart(Long userId) {
-//        List<Cart> cartList = cartRepository.findByUserId(userId).stream()
-//                // 하루가 지난 항목 체크
-//                .filter(cart -> !isCartExpired(cart.getCreatedAt()))
-//                .toList();
-//
-//        return cartList.stream()
-//                .map(cart -> new CartResponseDto(cart.getId(), cart.getMenuName(), cart.getPrice(), cart.getQuantity()))
-//                .toList();
-//    }
-//
-//    // 장바구니가 하루가 지났는지 확인
-//    private boolean isCartExpired(LocalDateTime createdAt) {
-//        return createdAt.isBefore(LocalDateTime.now().minusDays(1));
-//    }
-//
-//    @Transactional
-//    public List<Cart> addToCart(Long userId, Long storeId, String menuName, int quantity, int price) {
-//        // DB에서 userId 기준으로 장바구니 조회
-//        List<Cart> cartList = cartRepository.findByUserId(userId);
-//
-//        if (cartList.isEmpty()) {
-//            // 장바구니가 없으면 새로운 장바구니 생성
-//            User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
-//            Store store = storeRepository.findById(storeId).orElseThrow(EntityNotFoundException::new);
-//
-//            Cart cart = new Cart(user, store, menuName, quantity, price);
-//
-//            Cart savedCart = cartRepository.save(cart);
-//            setCartCookie();
-//            return List.of(savedCart);
-//        } else {
-//            // 기존 장바구니가 있는 경우
-//            Cart existingCart = cartList.get(0);
-//            if (!existingCart.getStore().getId().equals(storeId)) {
-//                // 다른 가게의 메뉴 추가 시 기존 장바구니 초기화
-//                cartRepository.deleteAll(cartList); // 모든 장바구니 삭제
-//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // HTTP 상태 설정
-//                throw new IllegalArgumentException("다른 가게의 메뉴를 추가할 수 없습니다."); // 필요 시 CustomException으로 대체 가능
-//            }
-//
-//            // 동일한 가게일 경우 장바구니 업데이트
-//            existingCart.updateCart(menuName, quantity, price);
-//            Cart saved = cartRepository.save(existingCart);
-//            return List.of(saved);
-//        }
-//    }
-//
-//
-//    // 장바구니 수정
-//    @Transactional
-//    public List<CartResponseDto> updateCart(Long userId, String menuName, int quantity, int price) {
-//        List<Cart> cartList = cartRepository.findByUserId(userId).stream()
-//                // 유효한 장바구니만 조회
-//                .filter(cart -> !isCartExpired(cart.getCreatedAt()))
-//                .toList();
-//
-//        if (cartList.isEmpty()) {
-//            throw new IllegalArgumentException("수정할 장바구니가 없습니다.");
-//        }
-//
-//        // 유효한 첫 번째 장바구니 수정
-//        Cart cart = cartList.get(0);
-//        cart.updateCart(menuName, quantity, price);
-//        cartRepository.save(cart);
-//        setCartCookie();
-//
-//        return cartList.stream()
-//                .map(c -> new CartResponseDto(c.getId(), c.getMenuName(), c.getPrice(), c.getQuantity()))
-//                .toList();
-//    }
-//
-//    // 장바구니 유효성 검사 후 쿠키 설정
-//    private void setCartCookie() {
-//        Cookie cartCookie = new Cookie("cart_valid", "true");
-//        cartCookie.setMaxAge(24 * 60 * 60); // 1 day
-//        cartCookie.setPath("/");
-//        response.addCookie(cartCookie);
-//    }
-
-// ///////////////////////////////////////////////////////////////////////
-
-//    // 장바구니 생성
-//    @Transactional
-//    public List<CartResponseDto> addToCart(Long userId, Long storeId, String menuName, int quantity, int price) {
-//        List<Cart> cartList = cartRepository.findByUserId(userId).stream()
-//                // 유효한 장바구니만 조회
-//                .filter(cart -> !isCartExpired(cart.getCreatedAt()) && cart.isVisible())
-//                .toList();
-//
-//        // 장바구니 없으면 새로운 장바구니 생성
-//        if (cartList.isEmpty()) {
-//            User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
-//            Store store = storeRepository.findById(storeId).orElseThrow(EntityNotFoundException::new);
-//
-//            Cart cart = new Cart(user, store, menuName, quantity, price);
-//            cartRepository.save(cart);
-//            return List.of(new CartResponseDto(cart.getId(), cart.getMenuName(), cart.getPrice(), cart.getQuantity()));
-//        } else {
-//            // 기존 장바구니 업데이트
-//            Cart existingCart = cartList.get(0);
-//            if (!existingCart.getStore().getId().equals(storeId)) {
-//                // 다른 가게의 메뉴 추가 시 예외 처리 CustomException 으로 처리
-//                throw new IllegalArgumentException("다른 가게의 메뉴를 추가할 수 없습니다.");
-//            }
-//
-//            existingCart.updateCart(menuName, quantity, price);
-//            cartRepository.save(existingCart);
-//            setCartCookie();
-//
-//            return cartRepository.findByUserId(userId).stream()
-//                    // 유효한 항목만 반환!
-//                    .filter(cart -> !isCartExpired(cart.getCreatedAt()))
-//                    .map(cart -> new CartResponseDto(cart.getId(), cart.getMenuName(), cart.getPrice(), cart.getQuantity()))
-//                    .toList();
-//        }
-//    }
-//
-//
-//    // 하루가 지난 장바구니 제거 Get
-//
-////    @Scheduled(cron = "0 0 0 * * ?")
-////    public void clearOldCarts() {
-////        Date oneDayAgo = Date.from(Instant.now().minus(1, ChronoUnit.DAYS));
-////
-////        List<Cart> oldCarts = cartRepository.findAll().stream()
-////                .filter(cart -> cart.getLastUpdated().before(oneDayAgo))
-////                .toList();
-////
-////        cartRepository.deleteAll(oldCarts);
-////    }
-
 }
