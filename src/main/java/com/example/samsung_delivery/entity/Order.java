@@ -58,7 +58,7 @@ public class Order extends BaseEntity{
 
     public Order(){}
 
-    public Order(Integer quantity ,Integer usePoint ,Integer totalPrice , String address , String orderNumber){
+    public Order(Integer quantity, Integer usePoint, Integer totalPrice, String address, String orderNumber){
         this.quantity = quantity;
         this.usePoint = usePoint;
         this.totalPrice = totalPrice;

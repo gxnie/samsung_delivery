@@ -120,13 +120,61 @@ Content-Type: application/json
 }
 
 ### 장바구니 수정
-PUT localhost:8080/cart
+PUT localhost:8080/cart?userId=1&storeId=1
+Content-Type: application/json
+
+{
+  "menuName": "쟁반짜장",
+  "quantity": 4,
+  "price" : 12000
+}
+
+### 장바구니 새로운 메뉴 추가
+POST localhost:8080/cart/item??userId=1&storeId=1
+Content-Type: application/json
+
+{
+  "menuName": "치킨",
+  "quantity": 2,
+  "price" : 24000
+}
+
+### 장바구니 전체 삭제
+DELETE localhost:8080/cart
+
+### 전체 일간 주문 수, 총액
+GET localhost:8080/dashboard/orders/daily-summary?date=2024-12-01
+
+### 전체 월간 주문 수, 총액
+GET localhost:8080/dashboard/orders/monthly-summary?month=2024-12
+
+### 가게별 일간 주문 수 총액
+GET localhost:8080/dashboard/stores/orders/daily-summary?date=2024-12-01
+
+### 가게별 월간 주문 수 총액
+GET localhost:8080/dashboard/stores/monthly-summary?month=2024-12&type=total
+
+### 특정유저 누적 포인트
+GET localhost:8080/point/{{userId}}
+
+### 쿠폰 생성
+POST localhost:8080/coupon/create
+Content-Type: application/json
+
+{
+  "storeId": 1,
+  "couponType": "FIXED_AMOUNT",
+  "discount": 5000,
+  "maxIssued": 3,
+  "expiredAt": "2024-11-25"
+}
+
+### 쿠폰 발급
+POST localhost:8080/coupon/issued
 Content-Type: application/json
 
 {
   "userId": 1,
-  "storeId" : 1,
-  "menuName": "쟁반짜장",
-  "quantity": 4,
-  "price" : 12000
+  "storeId": 1,
+  "couponId": 1
 }

@@ -12,12 +12,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartItemDto {
+    private Long storeId;
     private Long menuId;
     private String menuName;
     private int quantity;
     private int price;
-    private int discount; // 추가
-    private List<String> options; // 추가
+    private int usePoint;
+    private String address;
+    private int discount;
 }
 
 
