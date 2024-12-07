@@ -33,11 +33,13 @@ public class MenuController {
             @RequestBody MenuRequestDto dto,
             HttpServletRequest request) {
 
+        // 현재 사용자의 세션 가져오기
         HttpSession session = request.getSession(false);
         if (session == null) {
             throw new CustomException(ErrorCode.LOGIN_REQUIRED);
         }
 
+        // 세션에서 로그인 된 사용자 정보 가져오기
         LoginResponseDto loginUser = (LoginResponseDto) session.getAttribute(Const.LOGIN_USER);
 
         MenuResponseDto menuResponseDto = menuService.createMenu(dto.getStoreId(), loginUser.getEmail(), dto.getMenuName(), dto.getPrice());
@@ -75,6 +77,7 @@ public class MenuController {
 
         LoginResponseDto loginUser = (LoginResponseDto) session.getAttribute(Const.LOGIN_USER);
 
+        // MenuService 를 호출해 메뉴 상태를 CLOSE 로 변경
         menuService.deleteMenu(menuId, loginUser.getEmail());
         return ResponseEntity.ok().build();
     }
