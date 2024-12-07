@@ -14,14 +14,14 @@ import java.util.Optional;
 public interface PointRepository extends JpaRepository<Point,Long> {
 
 
-    @Query(value = "select sum (p.point) as totalPoint from Point as p where p.status = 'AVAILABLE' and p.user.id = :userId ")
+    @Query(value = "select sum (p.point) as totalPoint from Point as p " +
+            "where p.status = 'AVAILABLE' and p.user.id = :userId ")
     int totalPoint(@Param("userId") Long userId);
 
     @Modifying
     @Query(value = "update Point p set p.status = :status where p.expiredAt < now()")
     void updateStatus(@Param("status") PointStatus status);
 
-    Optional<Point> findByUser_Id(Long userId);
 
     int countByUser_Id(Long userId);
 }

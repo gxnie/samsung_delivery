@@ -15,6 +15,8 @@ public class OrderUseCouponResponseDto {
 
     private Long couponId;
 
+    private String orderNum;
+
     private Integer quantity;
 
     private Integer usePoint;
@@ -27,11 +29,12 @@ public class OrderUseCouponResponseDto {
 
     private OrderStatus status;
 
-    public OrderUseCouponResponseDto (Order order , int remainPoint  , Long couponId){
+    public OrderUseCouponResponseDto (Order order , int remainPoint  , Long couponId ){
         this.id = order.getId();
         this.menuId = order.getMenu().getId();
         this.userId = order.getUser().getId();
         this.couponId = couponId;
+        this.orderNum = order.getOrderNumber();
         this.quantity = order.getQuantity();
         this.usePoint = order.getUsePoint();
         this.remainPoint = remainPoint;
