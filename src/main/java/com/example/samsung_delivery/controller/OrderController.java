@@ -31,10 +31,13 @@ public class OrderController {
         HttpSession session = httpServletRequest.getSession(false);
         LoginResponseDto loginUser = (LoginResponseDto) session.getAttribute(Const.LOGIN_USER);
         if (couponId != null){
-            return new ResponseEntity<>(orderService.createUseCouponOrder(loginUser.getUserId(),couponId,requestDto),HttpStatus.CREATED);
+            return new ResponseEntity<>(
+                    orderService.createUseCouponOrder(loginUser.getUserId(),couponId,requestDto),
+                    HttpStatus.CREATED);
         }
-
-        return new ResponseEntity<>(orderService.createUsePointOrder(loginUser.getUserId(), requestDto) , HttpStatus.CREATED);
+        return new ResponseEntity<>(
+                orderService.createUsePointOrder(loginUser.getUserId(), requestDto),
+                HttpStatus.CREATED);
     }
 
     //주문 상태 수정

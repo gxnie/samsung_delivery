@@ -34,6 +34,9 @@ public class Order extends BaseEntity{
     @JoinColumn(name = "coupon_id")
     private Coupon coupon;
 
+    @Column(name = "order_number")
+    private String orderNumber;
+
     private int quantity;
 
     @Column(name = "total_price")
@@ -55,11 +58,12 @@ public class Order extends BaseEntity{
 
     public Order(){}
 
-    public Order(Integer quantity ,Integer usePoint ,Integer totalPrice , String address){
+    public Order(Integer quantity ,Integer usePoint ,Integer totalPrice , String address , String orderNumber){
         this.quantity = quantity;
         this.usePoint = usePoint;
         this.totalPrice = totalPrice;
         this.address = address;
+        this.orderNumber = orderNumber;
     }
 
     public void updateStatus(OrderStatus status){

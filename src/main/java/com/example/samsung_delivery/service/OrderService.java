@@ -13,6 +13,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
+
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -24,7 +26,6 @@ public class OrderService {
     private final CouponRepository couponRepository;
     private final CouponService couponService;
 
-
     //주문 생성
     @Transactional
     public OrderResponseDto createUsePointOrder(Long userId , OrderRequestDto dto) {
@@ -33,6 +34,10 @@ public class OrderService {
         Menu findMenu = menuRepository.findById(dto.getMenuId()).orElseThrow(
                 () -> new CustomException(ErrorCode.MENU_NOT_FOUND));
         Store findStore = findMenu.getStore();
+        //영업시간 확인
+        if (!availableStore(findStore)){
+            throw new CustomException(ErrorCode.STORE_CLOSED);
+        }
         //총 주문 금액 (메뉴가격 * 수량 - 사용포인트)
         int totalPrice = (findMenu.getPrice() * dto.getQuantity()) - dto.getUsePoint();
         int savePoint = totalPrice * 3/100;
@@ -40,8 +45,7 @@ public class OrderService {
         if (findStore.getMinOrderPrice() > totalPrice) {
             throw new CustomException(ErrorCode.PRICE_NOT_ENOUGH);
         }
-
-        Order order = new Order(dto.getQuantity() , dto.getUsePoint() , totalPrice , dto.getAddress());
+        Order order = new Order(dto.getQuantity() , dto.getUsePoint() , totalPrice , dto.getAddress() , getOrderNum());
         order.setUser(findUser);
         order.setMenu(findMenu);
         order.setStatus(OrderStatus.ORDER_COMPLETED);
@@ -54,10 +58,12 @@ public class OrderService {
         pointService.savePoint(userId,savePoint);
         int remainPoint = pointService.getUserTotalPoint(userId);
         orderRepository.save(order);
-
         return new OrderResponseDto(order ,remainPoint);
     }
 
+
+
+    //쿠폰사용시 주문생성 로직
     public OrderUseCouponResponseDto createUseCouponOrder(Long userId ,Long couponId ,OrderRequestDto dto){
 
         User findUser = userRepository.findById(userId).orElseThrow(
@@ -67,20 +73,21 @@ public class OrderService {
         Store findStore = findMenu.getStore();
         Coupon findCoupon = couponRepository.findById(couponId).orElseThrow(
                 ()->new CustomException(ErrorCode.COUPON_NOT_FOUND));
-
+        //영업시간 확인
+        if (availableStore(findStore)){
+            throw new CustomException(ErrorCode.STORE_CLOSED);
+        }
         int price = findMenu.getPrice() * dto.getQuantity() - dto.getUsePoint();
         int totalPrice = getTotalPrice(price,findCoupon);
         int savePoint = totalPrice * 3/100;
-
         if (findStore.getMinOrderPrice() > totalPrice) {
             throw new CustomException(ErrorCode.PRICE_NOT_ENOUGH);
         }
-        Order order = new Order(dto.getQuantity() , dto.getUsePoint() , totalPrice , dto.getAddress());
+        Order order = new Order(dto.getQuantity() , dto.getUsePoint() , totalPrice , dto.getAddress() , getOrderNum());
         order.setUser(findUser);
         order.setMenu(findMenu);
         order.setCoupon(findCoupon);
         order.setStatus(OrderStatus.ORDER_COMPLETED);
-
         //사용포인트가 있을경우
         if(dto.getUsePoint() != 0 ){
             pointService.usePoint(userId , dto.getUsePoint());
@@ -91,7 +98,6 @@ public class OrderService {
         orderRepository.save(order);
         //쿠폰사용 로직
         couponService.useCoupon(userId,couponId,findStore.getId());
-
         return new OrderUseCouponResponseDto(order,remainPoint,couponId);
     }
 
@@ -116,6 +122,13 @@ public class OrderService {
         return new OrderResponseDto(findOrder);
     }
 
+
+    public String getOrderNum(){
+        return System.currentTimeMillis() +"";
+    }
+
+
+
     public Order findOderById(Long id) {
         return orderRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
     }
@@ -128,6 +141,16 @@ public class OrderService {
             return price*(100-coupon.getDiscount())/100;
         }
         return 0;
+    }
+
+    boolean availableStore(Store store){
+        if(LocalTime.now().isBefore(store.getOpenTime())){
+            return false;
+        }
+        if (LocalTime.now().isAfter(store.getCloseTime())){
+            return false;
+        }
+        return true;
     }
 
 }

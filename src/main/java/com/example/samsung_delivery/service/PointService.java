@@ -29,7 +29,8 @@ public class PointService {
 
     //point 적립
     public void savePoint(Long userId , Integer savePoint ){
-        User findUser = userRepository.findById(userId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
+        User findUser = userRepository.findById(userId).orElseThrow(
+                ()->new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // point 만료기한 설정
         LocalDateTime expiredAt = getExpriedLocalDateTime();
@@ -43,7 +44,8 @@ public class PointService {
 
     //point 사용
     public void usePoint(Long userId, Integer usePoint){
-        User findUser = userRepository.findById(userId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
+        User findUser = userRepository.findById(userId).orElseThrow(
+                ()->new CustomException(ErrorCode.USER_NOT_FOUND));
         int userTotalPoint = getUserTotalPoint(userId);
         //해당유저가 사용할 point 이상 갖고있는지 판별
         if(userTotalPoint < usePoint){
@@ -62,13 +64,13 @@ public class PointService {
     }
 
     public int getUserTotalPoint(Long userId){
-        User findUser = userRepository.findById(userId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
+        User findUser = userRepository.findById(userId).orElseThrow(
+                ()->new CustomException(ErrorCode.USER_NOT_FOUND));
         int countUser = pointRepository.countByUser_Id(userId);
-        int totalPoint = 0;
         if (countUser != 0){
-            totalPoint = pointRepository.totalPoint(findUser.getId());
+            return pointRepository.totalPoint(findUser.getId());
         }
-       return totalPoint;
+       return 0;
     }
 
 

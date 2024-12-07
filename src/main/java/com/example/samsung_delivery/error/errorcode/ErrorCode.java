@@ -13,6 +13,7 @@ public enum ErrorCode {
 
     LOGIN_REQUIRED(BAD_REQUEST, "로그인이 필요합니다."),
     EXPIRED_SET_IMPOSSIBLE(BAD_REQUEST, "잘못된 만료기한 요청입니다."),
+    STORE_CLOSED(BAD_REQUEST,"영업시간이 아닙니다."),
 
 
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */

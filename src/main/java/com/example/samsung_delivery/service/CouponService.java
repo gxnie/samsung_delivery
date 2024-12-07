@@ -106,7 +106,8 @@ public class CouponService {
     //쿠폰 사용
     @Transactional
     public void useCoupon(Long userId , Long couponId , Long storedId){
-        Optional<CouponHistory> couponHistoryOptional = couponHistoryRepository.findByUser_IdAndCoupon_Id(userId,couponId);
+        Optional<CouponHistory> couponHistoryOptional =
+                couponHistoryRepository.findByUser_IdAndCoupon_Id(userId,couponId);
         int countIssuedCoupon = (int)couponHistoryRepository.countByUser_IdAndCoupon_Id(userId,couponId);
         //발급받은 쿠폰이 있는지 확인
         if (countIssuedCoupon == 0){
@@ -136,8 +137,6 @@ public class CouponService {
     public void statusUpdate(){
         couponHistoryRepository.updateStatus(CouponStatus.EXPIRED);
     }
-
-
 
     public LocalDateTime getExpiredAtFromLocalDate(LocalDate localDate){
         String localDateSt = localDate.toString();
