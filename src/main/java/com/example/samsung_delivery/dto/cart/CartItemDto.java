@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,4 +16,9 @@ public class CartItemDto {
     private String menuName;
     private int quantity;
     private int price;
+    private int discount; // 추가
+    private List<String> options; // 추가
 }
+
+
+
