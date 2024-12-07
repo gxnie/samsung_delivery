@@ -22,7 +22,7 @@ public class OrderService {
     private final UserRepository userRepository;
     private final PointService pointService;
     private final CouponRepository couponRepository;
-    private final CouponHistoryService couponHistoryService;
+    private final CouponService couponService;
 
 
     //주문 생성
@@ -90,7 +90,7 @@ public class OrderService {
         int remainPoint = pointService.getUserTotalPoint(userId);
         orderRepository.save(order);
         //쿠폰사용 로직
-        couponHistoryService.useCoupon(userId,couponId,findStore.getId());
+        couponService.useCoupon(userId,couponId,findStore.getId());
 
         return new OrderUseCouponResponseDto(order,remainPoint,couponId);
     }

@@ -7,7 +7,6 @@ import com.example.samsung_delivery.dto.coupon.CouponHistoryResponseDto;
 import com.example.samsung_delivery.dto.coupon.CouponRequestDto;
 import com.example.samsung_delivery.dto.coupon.CouponResponseDto;
 import com.example.samsung_delivery.dto.login.LoginResponseDto;
-import com.example.samsung_delivery.service.CouponHistoryService;
 import com.example.samsung_delivery.service.CouponService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CouponController {
 
     private final CouponService couponService;
-    private final CouponHistoryService couponHistoryService;
 
     @PostMapping("/create")
     public ResponseEntity<CouponResponseDto> createCoupon(
@@ -47,6 +45,6 @@ public class CouponController {
         HttpSession session = httpServletRequest.getSession(false);
         LoginResponseDto loginUser = (LoginResponseDto) session.getAttribute(Const.LOGIN_USER);
 
-        return new ResponseEntity<>(couponHistoryService.couponIssue(loginUser.getUserId(),requestDto),HttpStatus.CREATED);
+        return new ResponseEntity<>(couponService.couponIssue(loginUser.getUserId(),requestDto),HttpStatus.CREATED);
     }
 }

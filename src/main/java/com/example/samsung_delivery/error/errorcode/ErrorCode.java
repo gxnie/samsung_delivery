@@ -12,6 +12,7 @@ public enum ErrorCode {
     /* 400 BAD_REQUEST : 잘못된 요청 */
 
     LOGIN_REQUIRED(BAD_REQUEST, "로그인이 필요합니다."),
+    EXPIRED_SET_IMPOSSIBLE(BAD_REQUEST, "잘못된 만료기한 요청입니다."),
 
 
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
@@ -26,6 +27,7 @@ public enum ErrorCode {
     PRICE_NOT_ENOUGH(FORBIDDEN, "주문금액이 부족합니다."),
     POINT_NOT_ENOUGH(FORBIDDEN , "포인트 부족"),
     COUPON_CANNOT_ISSUED(FORBIDDEN, "해당쿠폰은 더이상 발급할 수 없습니다."),
+    COUPON_EXPIRED(FORBIDDEN,"해당쿠폰은 만료되었습니다."),
 
 
 
