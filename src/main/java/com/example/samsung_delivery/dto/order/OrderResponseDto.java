@@ -44,6 +44,7 @@ public class OrderResponseDto {
         this.id = order.getId();
         this.menuId = order.getMenu().getId();
         this.userId = order.getUser().getId();
+        this.orderNum = order.getOrderNumber();
         this.quantity = order.getQuantity();
         this.usePoint = order.getUsePoint();
         this.totalPrice = order.getTotalPrice();

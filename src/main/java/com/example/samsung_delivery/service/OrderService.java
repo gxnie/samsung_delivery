@@ -74,7 +74,7 @@ public class OrderService {
         Coupon findCoupon = couponRepository.findById(couponId).orElseThrow(
                 ()->new CustomException(ErrorCode.COUPON_NOT_FOUND));
         //영업시간 확인
-        if (availableStore(findStore)){
+        if (!availableStore(findStore)){
             throw new CustomException(ErrorCode.STORE_CLOSED);
         }
         int price = findMenu.getPrice() * dto.getQuantity() - dto.getUsePoint();
@@ -145,9 +145,11 @@ public class OrderService {
 
     boolean availableStore(Store store){
         if(LocalTime.now().isBefore(store.getOpenTime())){
+            LocalTime now = LocalTime.now();
             return false;
         }
         if (LocalTime.now().isAfter(store.getCloseTime())){
+            LocalTime now = LocalTime.now();
             return false;
         }
         return true;
