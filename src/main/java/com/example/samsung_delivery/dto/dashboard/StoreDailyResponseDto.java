@@ -1,9 +1,6 @@
 package com.example.samsung_delivery.dto.dashboard;
 
-import com.example.samsung_delivery.entity.Store;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 public class StoreDailyResponseDto {

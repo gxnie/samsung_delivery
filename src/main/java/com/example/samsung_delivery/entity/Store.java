@@ -3,9 +3,7 @@ package com.example.samsung_delivery.entity;
 import com.example.samsung_delivery.enums.StoreStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
-
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 

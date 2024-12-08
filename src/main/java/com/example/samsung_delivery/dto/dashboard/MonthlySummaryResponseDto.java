@@ -1,8 +1,6 @@
 package com.example.samsung_delivery.dto.dashboard;
 
 import lombok.Getter;
-
-import java.time.LocalDate;
 import java.time.YearMonth;
 
 @Getter

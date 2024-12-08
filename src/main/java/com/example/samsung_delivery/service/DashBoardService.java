@@ -1,17 +1,12 @@
 package com.example.samsung_delivery.service;
 
 import com.example.samsung_delivery.dto.dashboard.*;
-import com.example.samsung_delivery.entity.Store;
-import com.example.samsung_delivery.enums.StoreStatus;
 import com.example.samsung_delivery.repository.OrderRepository;
-import com.example.samsung_delivery.repository.StoreRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

@@ -1,6 +1,5 @@
 package com.example.samsung_delivery.dto.store;
 
-import com.example.samsung_delivery.enums.StoreStatus;
 import lombok.Getter;
 
 import java.time.LocalTime;
