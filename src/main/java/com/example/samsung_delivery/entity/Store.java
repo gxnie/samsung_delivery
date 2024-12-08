@@ -3,9 +3,7 @@ package com.example.samsung_delivery.entity;
 import com.example.samsung_delivery.enums.StoreStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
-
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -37,6 +35,9 @@ public class Store extends BaseEntity{
     @Column(nullable = false)
     private int minOrderPrice;
 
+    @Column(nullable = false)
+    private String category;
+
     @Enumerated(EnumType.STRING)
     private StoreStatus status = StoreStatus.ACTIVE;
 
@@ -47,8 +48,9 @@ public class Store extends BaseEntity{
 //    private List<Cart> carts = new ArrayList<>();
 
 
-    public Store(User user, String storeName, LocalTime openTime, LocalTime closeTime, int minOrderPrice) {
+    public Store(User user,String category, String storeName, LocalTime openTime, LocalTime closeTime, int minOrderPrice) {
         this.user = user;
+        this.category = category;
         this.storeName = storeName;
         this.openTime = openTime;
         this.closeTime = closeTime;

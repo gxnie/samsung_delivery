@@ -13,6 +13,8 @@ public class StoreResponseDto {
 
     private Long userId;
 
+    private String category;
+
     private String storeName;
 
     private LocalTime openTime;
@@ -26,6 +28,7 @@ public class StoreResponseDto {
     public StoreResponseDto(Store store, List<MenuResponseDto> menus) {
         this.id = store.getId();
         this.userId = store.getUser().getId();
+        this.category = store.getCategory();
         this.storeName = store.getStoreName();
         this.openTime = store.getOpenTime();
         this.closeTime = store.getCloseTime();
@@ -36,6 +39,7 @@ public class StoreResponseDto {
     public StoreResponseDto(Store store) {
         this.id = store.getId();
         this.userId = store.getUser().getId();
+        this.category = store.getCategory();
         this.storeName = store.getStoreName();
         this.openTime = store.getOpenTime();
         this.closeTime = store.getCloseTime();

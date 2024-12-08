@@ -12,11 +12,11 @@ import com.example.samsung_delivery.repository.MenuRepository;
 import com.example.samsung_delivery.repository.StoreRepository;
 import com.example.samsung_delivery.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class StoreService {
         User findUser = userRepository.findUserByEmail(email).orElseThrow(()
                 -> new ResponseStatusException(HttpStatus.NOT_FOUND, "이메일과 관련된 사용자를 찾을 수 없음"));
 
-        Store store = new Store(findUser, storeRequestDto.getStoreName(), storeRequestDto.getOpenTime(),storeRequestDto.getCloseTime(), storeRequestDto.getMinOrderPrice());
+        Store store = new Store(findUser, storeRequestDto.getCategory(), storeRequestDto.getStoreName(), storeRequestDto.getOpenTime(),storeRequestDto.getCloseTime(), storeRequestDto.getMinOrderPrice());
 
         Store savedStore = storeRepository.save(store);
 
@@ -43,7 +43,7 @@ public class StoreService {
     }
 
     //가게 단건 조회
-    @Transactional
+    @Transactional(readOnly = true)
     public StoreResponseDto findByStoreId(Long id) {
 
         Store store = storeRepository.findById(id)
