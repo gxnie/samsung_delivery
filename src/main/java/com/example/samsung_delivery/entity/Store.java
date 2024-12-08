@@ -44,10 +44,6 @@ public class Store extends BaseEntity{
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Review> review;
 
-//    @OneToMany(mappedBy = "store")
-//    private List<Cart> carts = new ArrayList<>();
-
-
     public Store(User user,String category, String storeName, LocalTime openTime, LocalTime closeTime, int minOrderPrice) {
         this.user = user;
         this.category = category;
