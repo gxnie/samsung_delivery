@@ -2,25 +2,18 @@ package com.example.samsung_delivery.service;
 
 import com.example.samsung_delivery.dto.order.OrderRequestDto;
 import com.example.samsung_delivery.dto.order.OrderResponseDto;
-import com.example.samsung_delivery.entity.Menu;
-import com.example.samsung_delivery.entity.Order;
-import com.example.samsung_delivery.entity.Store;
-import com.example.samsung_delivery.entity.User;
+import com.example.samsung_delivery.dto.order.OrderUseCouponResponseDto;
+import com.example.samsung_delivery.entity.*;
+import com.example.samsung_delivery.enums.CouponType;
 import com.example.samsung_delivery.enums.OrderStatus;
 import com.example.samsung_delivery.error.errorcode.ErrorCode;
 import com.example.samsung_delivery.error.exception.CustomException;
-import com.example.samsung_delivery.repository.MenuRepository;
-import com.example.samsung_delivery.repository.OrderRepository;
-import com.example.samsung_delivery.repository.StoreRepository;
-import com.example.samsung_delivery.repository.UserRepository;
+import com.example.samsung_delivery.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.time.LocalTime;
 
 @Service
 @RequiredArgsConstructor
@@ -28,34 +21,87 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final MenuRepository menuRepository;
-    private final UserRepository userRepository  ;
-    private final StoreRepository storeRepository;
+    private final UserRepository userRepository;
+    private final PointService pointService;
+    private final CouponRepository couponRepository;
+    private final CouponService couponService;
 
-
-    public Order findOderById(Long id) {
-        return orderRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
-    }
     //주문 생성
     @Transactional
-    public OrderResponseDto save (Long userId , Long menuId, Integer quantity , String address ) {
-        User findUser = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("회원을 찾을 수 없습니다."));
-        Menu findMenu = menuRepository.findById(menuId).orElseThrow(() -> new NoSuchElementException("메뉴를 찾을 수 없습니다."));
+    public OrderResponseDto createUsePointOrder(Long userId , OrderRequestDto dto) {
+        User findUser = userRepository.findById(userId).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        Menu findMenu = menuRepository.findById(dto.getMenuId()).orElseThrow(
+                () -> new CustomException(ErrorCode.MENU_NOT_FOUND));
         Store findStore = findMenu.getStore();
-        int totalPrice = findMenu.getPrice() * quantity;
+        //영업시간 확인
+        if (!availableStore(findStore)){
+            throw new CustomException(ErrorCode.STORE_CLOSED);
+        }
+        //총 주문 금액 (메뉴가격 * 수량 - 사용포인트)
+        int totalPrice = (findMenu.getPrice() * dto.getQuantity()) - dto.getUsePoint();
+        int savePoint = totalPrice * 3/100;
 
         if (findStore.getMinOrderPrice() > totalPrice) {
             throw new CustomException(ErrorCode.PRICE_NOT_ENOUGH);
         }
-
-        Order order = new Order(quantity , totalPrice , address);
+        Order order = new Order(dto.getQuantity() , dto.getUsePoint() , totalPrice , dto.getAddress() , getOrderNum());
         order.setUser(findUser);
         order.setMenu(findMenu);
         order.setStatus(OrderStatus.ORDER_COMPLETED);
 
+        //사용포인트가 있을경우
+        if(dto.getUsePoint() != 0 ){
+            pointService.usePoint(userId , dto.getUsePoint());
+        }
+        //포인트 적립
+        pointService.savePoint(userId,savePoint);
+        int remainPoint = pointService.getUserTotalPoint(userId);
         orderRepository.save(order);
-
-        return new OrderResponseDto(order);
+        return new OrderResponseDto(order ,remainPoint);
     }
+
+
+
+    //쿠폰사용시 주문생성 로직
+    public OrderUseCouponResponseDto createUseCouponOrder(Long userId ,Long couponId ,OrderRequestDto dto){
+
+        User findUser = userRepository.findById(userId).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        Menu findMenu = menuRepository.findById(dto.getMenuId()).orElseThrow(
+                () -> new CustomException(ErrorCode.MENU_NOT_FOUND));
+        Store findStore = findMenu.getStore();
+        Coupon findCoupon = couponRepository.findById(couponId).orElseThrow(
+                ()->new CustomException(ErrorCode.COUPON_NOT_FOUND));
+        //영업시간 확인
+        if (availableStore(findStore)){
+            throw new CustomException(ErrorCode.STORE_CLOSED);
+        }
+        int price = findMenu.getPrice() * dto.getQuantity() - dto.getUsePoint();
+        int totalPrice = getTotalPrice(price,findCoupon);
+        int savePoint = totalPrice * 3/100;
+        if (findStore.getMinOrderPrice() > totalPrice) {
+            throw new CustomException(ErrorCode.PRICE_NOT_ENOUGH);
+        }
+        Order order = new Order(dto.getQuantity() , dto.getUsePoint() , totalPrice , dto.getAddress() , getOrderNum());
+        order.setUser(findUser);
+        order.setMenu(findMenu);
+        order.setCoupon(findCoupon);
+        order.setStatus(OrderStatus.ORDER_COMPLETED);
+        //사용포인트가 있을경우
+        if(dto.getUsePoint() != 0 ){
+            pointService.usePoint(userId , dto.getUsePoint());
+        }
+        //포인트 적립
+        pointService.savePoint(userId,savePoint);
+        int remainPoint = pointService.getUserTotalPoint(userId);
+        orderRepository.save(order);
+        //쿠폰사용 로직
+        couponService.useCoupon(userId,couponId,findStore.getId());
+        return new OrderUseCouponResponseDto(order,remainPoint,couponId);
+    }
+
+
 
     //주문 상태값 변경
     @Transactional
@@ -74,6 +120,37 @@ public class OrderService {
                 break;
         }
         return new OrderResponseDto(findOrder);
+    }
+
+
+    public String getOrderNum(){
+        return System.currentTimeMillis() +"";
+    }
+
+
+
+    public Order findOderById(Long id) {
+        return orderRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
+    }
+
+    public int getTotalPrice(int price ,Coupon coupon){
+        if (coupon.getCouponType() == CouponType.FIXED_AMOUNT){
+            return price - coupon.getDiscount();
+        }
+        if (coupon.getCouponType() == CouponType.FIXED_RATE){
+            return price*(100-coupon.getDiscount())/100;
+        }
+        return 0;
+    }
+
+    boolean availableStore(Store store){
+        if(LocalTime.now().isBefore(store.getOpenTime())){
+            return false;
+        }
+        if (LocalTime.now().isAfter(store.getCloseTime())){
+            return false;
+        }
+        return true;
     }
 
 }
