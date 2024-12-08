@@ -16,6 +16,7 @@ public class WebConfig {
         // HTTP 요청에 대해 로그인 작업 처리, LoginFilter 인스턴스를 필터로 설정
         filterRegistrationBean.setFilter(new LoginFilter());
 
+
         filterRegistrationBean.setOrder(1);
 
         // 모든 URL 패턴에 대해 필터가 동작하도록 설정
@@ -24,4 +25,17 @@ public class WebConfig {
         // 필터 설정이 완료된 FilterRegistrationBean 객체 반환
         return filterRegistrationBean;
     }
+
+    @Bean
+    public FilterRegistrationBean adminFilter() {
+        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
+        filterRegistrationBean.setFilter(new AdminFilter());
+
+        filterRegistrationBean.setOrder(0);
+
+        filterRegistrationBean.addUrlPatterns("/dashboard/*");
+
+        return filterRegistrationBean;
+    }
+
 }

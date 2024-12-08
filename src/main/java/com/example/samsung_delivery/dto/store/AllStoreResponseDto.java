@@ -13,6 +13,8 @@ public class AllStoreResponseDto {
 
     private Long userId;
 
+    private String category;
+
     private String storeName;
 
     private LocalTime openTime;
@@ -27,6 +29,7 @@ public class AllStoreResponseDto {
     public AllStoreResponseDto(Store store) {
         this.id = store.getId();
         this.userId = store.getUser().getId();
+        this.category = store.getCategory();
         this.storeName = store.getStoreName();
         this.openTime = store.getOpenTime();
         this.closeTime = store.getCloseTime();
