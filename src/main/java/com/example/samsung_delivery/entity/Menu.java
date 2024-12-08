@@ -27,7 +27,7 @@ public class Menu extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private MenuStatus status = MenuStatus.OPEN;
+    private MenuStatus status = MenuStatus.AVAILABLE;
 
     @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Review> review;

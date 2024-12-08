@@ -46,8 +46,8 @@ public class MenuService {
             throw new CustomException(ErrorCode.INVALID_USER_ROLE);
         }
 
-        // 메뉴 객체 생성 및 데이터 베이스 저장 : 기본적으로 상태는 OPEN
-        Menu menu = new Menu(menuName, price, store, MenuStatus.OPEN);
+        // 메뉴 객체 생성 및 데이터 베이스 저장 : 기본적으로 상태는 AVAILABLE
+        Menu menu = new Menu(menuName, price, store, MenuStatus.AVAILABLE);
         Menu savedMenu = menuRepository.save(menu);
 
         return new MenuResponseDto(savedMenu.getId(), store.getId(), savedMenu.getMenuName(), savedMenu.getPrice());
@@ -104,7 +104,7 @@ public class MenuService {
             throw new CustomException(ErrorCode.INVALID_STORE_ACCESS);
         }
 
-        // 메뉴 상태를 CLOSE 로 업데이트
-        menuRepository.updateStatus(menuId, MenuStatus.CLOSE);
+        // 메뉴 상태를 OUT_OF_STOCK 로 업데이트
+        menuRepository.updateStatus(menuId, MenuStatus.OUT_OF_STOCK);
     }
 }
