@@ -10,6 +10,7 @@ import com.example.samsung_delivery.entity.CouponHistory;
 import com.example.samsung_delivery.entity.Store;
 import com.example.samsung_delivery.entity.User;
 import com.example.samsung_delivery.enums.CouponStatus;
+import com.example.samsung_delivery.enums.CouponType;
 import com.example.samsung_delivery.enums.UserRole;
 import com.example.samsung_delivery.error.errorcode.ErrorCode;
 import com.example.samsung_delivery.error.exception.CustomException;
@@ -56,6 +57,8 @@ public class CouponService {
         if (LocalDate.now().isAfter(requestDto.getExpiredAt())){
             throw new CustomException(ErrorCode.EXPIRED_SET_IMPOSSIBLE);
         }
+        // 정률 , 정액 쿠폰타입에따라 discount 확인
+        discountCheck(requestDto.getCouponType(),requestDto.getDiscount());
         //만료 기한 LocalDateTime 변환
         LocalDateTime expiredAt = getExpiredAtFromLocalDate(requestDto.getExpiredAt());
 
@@ -95,6 +98,8 @@ public class CouponService {
         if (LocalDateTime.now().isAfter(findCoupon.getExpiredAt())){
             throw new CustomException(ErrorCode.COUPON_EXPIRED);
         }
+
+
 
         CouponHistory couponHistory = new CouponHistory(findUser,findStore,findCoupon);
         couponHistory.setStatus(CouponStatus.AVAILABLE);
@@ -149,5 +154,19 @@ public class CouponService {
 
     public int countCoupon(Long couponId){
         return (int)couponHistoryRepository.countByCoupon_Id(couponId);
+    }
+
+
+
+    public void discountCheck(CouponType couponType , int discount){
+        if (couponType == CouponType.FIXED_AMOUNT && discount < 1000){
+            throw new CustomException(ErrorCode.FIXED_AMOUNT_ERROR);
+        }
+        if (couponType == CouponType.FIXED_RATE){
+            if (discount < 0 || discount >100){
+                throw new CustomException(ErrorCode.FIXED_RATE_ERROR);
+            }
+        }
+
     }
 }
