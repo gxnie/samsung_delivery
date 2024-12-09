@@ -14,7 +14,9 @@
 ## 와이어프레임 📝
 
 <details>
-  <summary>  와이어프레임 [figma] </summary>
+  <summary>  와이어프레임 </summary> 
+
+![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
 
   ### User
   ![와이어프레임 User 2024-12-08 오후 11 18 08](https://github.com/user-attachments/assets/3d54ccfe-18d8-495b-a7b9-30b145206162)
