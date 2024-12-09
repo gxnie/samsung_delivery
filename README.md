@@ -98,12 +98,6 @@
 - 장바구니는 Cookie에 encoding 되어 저장, 하루가 지나면 자동으로 삭제
   
 
-유저는 저장해둔 장바구니를 통해 상품을 주문할 수 있습니다.
-유저는 자신이 생성한 주문내역을 mainMenu(가장 비싼 메뉴), totalPrice 등 의 정보와 함께 리스트로 받아볼 수 있습니다.
-Owner 유저는 자신의 가게에 들어온 주문 내역을 받아볼 수 있습니다.
-Order 는 unchecked, checked, cooking, cooked, riding, complete 의 status 를 가지고 있습니다.
-Owner 는 들어온 주문의 status 를 변경할 수 있습니다.
-
 
 유저는 여러개의 메뉴들을 수량을 지정해 장바구니에 담을 수 있으며 수정이 가능합니다.
 해당 카트로 주문완료 시 장바구니 정보는 삭제됩니다.
