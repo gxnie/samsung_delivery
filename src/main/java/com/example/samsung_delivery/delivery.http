@@ -31,8 +31,8 @@ Content-Type: application/json
 
 {
   "storeName": "삼성",
-  "openTime": "HH:MM",
-  "closeTime": "HH:MM",
+  "openTime": "10:00",
+  "closeTime": "11:00",
   "minOrderPrice": 10000
 }
 
@@ -71,6 +71,7 @@ PATCH localhost:8080/menus/{{menuId}}
 Content-Type: application/json
 
 {
+  "storeId": "1",
   "menuName" : "쟁반짜장",
   "price" : 12000
 }
@@ -90,13 +91,7 @@ Content-Type: application/json
 }
 
 ### 주문 상태 변경
-PATCH localhost:8080/orders/{{orderId}}
-Content-Type: application/json
-
-{
-  "status" : 2
-}
-### status는 ENUM 처리 추후 수정 바람
+PATCH localhost:8080/orders/status=ACCEPT_ORDER
 
 ### 리뷰 생성
 POST localhost:8080/reviews
@@ -110,3 +105,107 @@ Content-Type: application/json
 
 ### 리뷰 생성일자 기준 조회
 GET localhost:8080/reviews?storeId=1&sort=rating
+
+### 장바구니 조회 - 장바구니 생성 전에 데이터가 있는 지 없는 지 확인
+GET localhost:8080/cart
+
+### 장바구니 생성
+POST localhost:8080/cart?userId=1&storeId=1
+Content-Type: application/json
+
+{
+  "menuName": "삼선짬뽕",
+  "quantity": 3,
+  "price" : 12000
+}
+
+### 장바구니 수정
+PUT localhost:8080/cart?userId=1&storeId=1
+Content-Type: application/json
+
+{
+  "menuName": "쟁반짜장",
+  "quantity": 4,
+  "price" : 12000
+}
+
+### 장바구니 새로운 메뉴 추가
+POST localhost:8080/cart/item??userId=1&storeId=1
+Content-Type: application/json
+
+{
+  "menuName": "치킨",
+  "quantity": 2,
+  "price" : 24000
+}
+
+### 장바구니 전체 삭제
+DELETE localhost:8080/cart
+
+### 특정유저 누적 포인트
+GET localhost:8080/point/{{userId}}
+
+### 쿠폰 생성
+POST localhost:8080/coupon/create
+Content-Type: application/json
+
+{
+  "storeId": 1,
+  "couponType": "FIXED_AMOUNT",
+  "discount": 5000,
+  "maxIssued": 3,
+  "expiredAt": "2024-11-25"
+}
+
+### 쿠폰 발급
+POST localhost:8080/coupon/issued
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "storeId": 1,
+  "couponId": 1
+}
+
+### 어드민 회원가입
+POST localhost:8080/users/signup
+Content-Type: application/json
+
+{
+    "email" : "admin@naver.com",
+    "password" : "Asdf1234%",
+    "role" : "ADMIN"
+}
+
+### 어드민 로그인
+POST localhost:8080/users/login
+Content-Type: application/json
+
+{
+  "email" : "admin@naver.com",
+  "password" : "Asdf1234%"
+}
+
+### 전체 일간 주문 건수/총액 조회
+GET localhost:8080/dashboard/orders/daily-summary?date=2024-12-08
+Content-Type: application/json
+
+### 전체 월간 주문 건수/총액 조회
+GET localhost:8080/dashboard/orders/monthly-summary?month=2024-12
+Content-Type: application/json
+
+### 가게별 일간 주문 건수/총액 조회
+GET localhost:8080/dashboard/stores/orders/daily-summary?date=2024-12-08
+Content-Type: application/json
+
+### 가게별 월간 주문 건수/총액 조회
+GET localhost:8080/dashboard/stores/orders/monthly-summary?month=2024-12
+Content-Type: application/json
+
+### 카테고리별 일간 주문 건수/총액 조회
+GET localhost:8080/dashboard/category/orders/daily-summary?date=2024-12-08
+Content-Type: application/json
+
+### 카테고리별 월간 주문 건수/총액 조회
+GET localhost:8080/dashboard/category/orders/monthly-summary?month=2024-12
+Content-Type: application/json

@@ -5,5 +5,8 @@ public enum UserRole {
     USER,
 
     // 사장님
-    OWNER;
+    OWNER,
+
+    //관리자
+    ADMIN;
 }

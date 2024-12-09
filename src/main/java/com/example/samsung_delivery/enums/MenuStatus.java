@@ -1,7 +1,6 @@
 package com.example.samsung_delivery.enums;
 
 public enum MenuStatus {
-    OPEN,
-    CLOSE // 메뉴 품절
-    // 목적이 명확한 단어
+    AVAILABLE, // 메뉴 기본 상태 값
+    OUT_OF_STOCK // 메뉴 품절
 }
