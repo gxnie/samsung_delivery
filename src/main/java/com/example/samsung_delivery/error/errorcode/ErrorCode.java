@@ -14,7 +14,8 @@ public enum ErrorCode {
     LOGIN_REQUIRED(BAD_REQUEST, "로그인이 필요합니다."),
     EXPIRED_SET_IMPOSSIBLE(BAD_REQUEST, "잘못된 만료기한 요청입니다."),
     STORE_CLOSED(BAD_REQUEST,"영업시간이 아닙니다."),
-
+    FIXED_RATE_ERROR(BAD_REQUEST , "정률할인은 0부터 100사이의 할인률만 가능합니다."),
+    FIXED_AMOUNT_ERROR(BAD_REQUEST,  "정액쿠폰은 1000원 이상부터 가능합니다."),
 
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
     UNAUTHORIZED_USER(UNAUTHORIZED, "권한이 없습니다. 해당유저만 가능합니다."),
