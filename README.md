@@ -1,13 +1,13 @@
 # samsung_delivery 🚙
-## 재용이연이 만든 삼성가 배달 앱🧍🏻🧍🏻‍♀️🧍🏻‍♂️🧍🏻
+## 재용이연이 만든 삼성가 배달 앱🧍🏻🧍🏻‍♀️🧍🏻‍♂️🧍🏻 
 ### 아웃소싱 프로젝트 배달 앱 만들기 🧑🏻‍💻
 ------------
 ###  프로젝트 기간
 #### 🗓 2024.12.03 ~ 2024.12.09
 ------------
-## 🛠 개발 환경
+## 🛠 개발 환경 
 - Tech : ![Spring](https://img.shields.io/badge/Spring-6DB33F.svg?&style=for-the-badge&logo=Spring&logoColor=white) 3.3.5
-- IDE : IntelliJ
+- IDE : ![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white)
 - JDK : ![Java](https://img.shields.io/badge/Java-007396.svg?&style=for-the-badge&logo=Java&logoColor=white) 17
 - DB : ![MySQL](https://img.shields.io/badge/MySQL-4479A1.svg?&style=for-the-badge&logo=MySQL&logoColor=white) Ver 8+
 ------------
