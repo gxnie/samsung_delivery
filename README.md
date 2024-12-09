@@ -6,11 +6,10 @@
 #### 🗓 2024.12.03 ~ 2024.12.09
 ------------
 ## 🛠 개발 환경
-- Tech :  ![Java](https://img.shields.io/badge/Java-007396.svg?&style=for-the-badge&logo=Java&logoColor=white)
-![Spring](https://img.shields.io/badge/Spring-6DB33F.svg?&style=for-the-badge&logo=Spring&logoColor=white)
+- Tech : ![Spring](https://img.shields.io/badge/Spring-6DB33F.svg?&style=for-the-badge&logo=Spring&logoColor=white) 3.3.5
 - IDE : IntelliJ
-- JDK : 17
-- DB : ![MySQL](https://img.shields.io/badge/MySQL-4479A1.svg?&style=for-the-badge&logo=MySQL&logoColor=white)
+- JDK : ![Java](https://img.shields.io/badge/Java-007396.svg?&style=for-the-badge&logo=Java&logoColor=white) 17
+- DB : ![MySQL](https://img.shields.io/badge/MySQL-4479A1.svg?&style=for-the-badge&logo=MySQL&logoColor=white) Ver 8+
 ------------
 ## 와이어프레임 📝
 
