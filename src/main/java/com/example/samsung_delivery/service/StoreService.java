@@ -49,11 +49,19 @@ public class StoreService {
         Store store = storeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("가게가 없습니다 : " + id));
 
-        List<Menu> menus = menuRepository.findByStoreId(id);
-        List<MenuResponseDto> menuResponseDtos = menus.stream()
-                .map(MenuResponseDto::new)
-                .toList();
-        return new StoreResponseDto(store, menuResponseDtos);
+        if(store.getStatus().equals(StoreStatus.ACTIVE)) {
+            List<Menu> menus = menuRepository.findByStoreId(id);
+            List<MenuResponseDto> menuResponseDtos = menus.stream()
+                    .map(MenuResponseDto::new)
+                    .toList();
+            return new StoreResponseDto(store, menuResponseDtos);
+        }
+
+        else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "폐업된 가게 입니다.");
+        }
+
+
 
     }
     

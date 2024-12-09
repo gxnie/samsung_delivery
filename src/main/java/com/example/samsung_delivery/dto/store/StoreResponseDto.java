@@ -2,11 +2,13 @@ package com.example.samsung_delivery.dto.store;
 
 import com.example.samsung_delivery.dto.menu.MenuResponseDto;
 import com.example.samsung_delivery.entity.Store;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import java.time.LocalTime;
 import java.util.List;
 
 @Getter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class StoreResponseDto {
 
     private Long id;
