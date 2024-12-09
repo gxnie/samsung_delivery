@@ -112,8 +112,11 @@ public class CouponService {
     @Transactional
     public void useCoupon(Long userId , Long couponId , Long storedId){
         Optional<CouponHistory> couponHistoryOptional =
-                couponHistoryRepository.findByUser_IdAndCoupon_Id(userId,couponId);
-        int countIssuedCoupon = (int)couponHistoryRepository.countByUser_IdAndCoupon_Id(userId,couponId);
+                couponHistoryRepository.findByUserIdAndCouponId(userId,couponId);
+
+
+        int countIssuedCoupon = (int)couponHistoryRepository.countByUserIdAndCouponId(userId,couponId);
+
         //발급받은 쿠폰이 있는지 확인
         if (countIssuedCoupon == 0){
             throw new CustomException(ErrorCode.COUPON_NOT_FOUND);
@@ -149,11 +152,11 @@ public class CouponService {
     }
 
     public int countUserCoupon(Long userId , Long couponId){
-        return (int)couponHistoryRepository.countByUser_IdAndCoupon_Id(userId,couponId);
+        return (int)couponHistoryRepository.countByUserIdAndCouponId(userId,couponId);
     }
 
     public int countCoupon(Long couponId){
-        return (int)couponHistoryRepository.countByCoupon_Id(couponId);
+        return (int)couponHistoryRepository.countByCouponId(couponId);
     }
 
 

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
 import static java.time.LocalDateTime.now;
 
@@ -66,7 +65,7 @@ public class PointService {
     public int getUserTotalPoint(Long userId){
         User findUser = userRepository.findById(userId).orElseThrow(
                 ()->new CustomException(ErrorCode.USER_NOT_FOUND));
-        int countUser = pointRepository.countByUser_Id(userId);
+        int countUser = pointRepository.countByUserId(userId);
         if (countUser != 0){
             return pointRepository.totalPoint(findUser.getId());
         }

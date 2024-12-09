@@ -15,14 +15,16 @@ import java.util.Optional;
 public interface CouponHistoryRepository extends JpaRepository<CouponHistory , Long> {
 
 
-    long countByUser_IdAndCoupon_Id(Long userId, Long couponId);
+    long countByUserIdAndCouponId(Long userId, Long couponId);
 
-    long countByCoupon_Id(Long couponId);
+    long countByCouponId(Long couponId);
 
-    Optional<CouponHistory> findByUser_IdAndCoupon_Id(Long userId, Long couponId);
+    Optional<CouponHistory> findByUserIdAndCouponId(Long userId, Long couponId);
 
     @Modifying
     @Query(value = "update CouponHistory ch set ch.status = :status where ch.coupon.id in " +
             "(select c.id from Coupon c where c.expiredAt < now())")
     void updateStatus(@Param("status")CouponStatus status);
+
+
 }
